@@ -15,6 +15,7 @@
 		3F92829919AA87F4000D3791 /* en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3F92829819AA87F4000D3791 /* en.txt */; };
 		3F92829E19AA9713000D3791 /* LetterNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92829D19AA9713000D3791 /* LetterNode.m */; };
 		3F9282A019AA9727000D3791 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92829F19AA9727000D3791 /* ViewController.m */; };
+		3F9282A319AAB546000D3791 /* WordLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9282A219AAB546000D3791 /* WordLogic.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		3F92829C19AA9713000D3791 /* LetterNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LetterNode.h; sourceTree = "<group>"; };
 		3F92829D19AA9713000D3791 /* LetterNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetterNode.m; sourceTree = "<group>"; };
 		3F92829F19AA9727000D3791 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		3F9282A119AAB546000D3791 /* WordLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordLogic.h; sourceTree = "<group>"; };
+		3F9282A219AAB546000D3791 /* WordLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordLogic.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +94,8 @@
 				3F92829F19AA9727000D3791 /* ViewController.m */,
 				3F92829C19AA9713000D3791 /* LetterNode.h */,
 				3F92829D19AA9713000D3791 /* LetterNode.m */,
+				3F9282A119AAB546000D3791 /* WordLogic.h */,
+				3F9282A219AAB546000D3791 /* WordLogic.m */,
 				3F92828219AA85E6000D3791 /* Images.xcassets */,
 				3F92827519AA85E6000D3791 /* Supporting Files */,
 			);
@@ -227,6 +232,7 @@
 				3F92829E19AA9713000D3791 /* LetterNode.m in Sources */,
 				3F92827B19AA85E6000D3791 /* AppDelegate.m in Sources */,
 				3F9282A019AA9727000D3791 /* ViewController.m in Sources */,
+				3F9282A319AAB546000D3791 /* WordLogic.m in Sources */,
 				3F92827819AA85E6000D3791 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
