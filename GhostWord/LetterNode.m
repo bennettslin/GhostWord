@@ -1,6 +1,6 @@
 //
 //  LetterNode.m
-//  EnergySavvySpellcheck
+//  EnergySavvySpellcheckChallenge
 //
 //  Created by Bennett Lin on 5/14/14.
 //  Copyright (c) 2014 Bennett Lin. All rights reserved.
