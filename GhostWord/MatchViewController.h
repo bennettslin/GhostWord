@@ -14,7 +14,7 @@
 
 @property (weak, nonatomic) id<MatchDelegate> delegate;
 
--(void)generateWordLists;
+-(void)preLoadModel;
 
 @end
 

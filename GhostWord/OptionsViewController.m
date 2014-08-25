@@ -14,18 +14,30 @@
 #define kPlayer1Key @"player1Name"
 #define kPlayer2Key @"player2Name"
 
+typedef enum gameRules {
+  kRulesGhost,
+  kRulesSuper,
+  kRulesDuper,
+  kRulesXGhost
+} GameRules;
+
 @interface OptionsViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *player1NameField;
 @property (weak, nonatomic) IBOutlet UITextField *player2NameField;
 
-@property (weak, nonatomic) IBOutlet UILabel *minimumLettersLabel;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *minimumLettersControl;
-@property (strong, nonatomic) NSUserDefaults *defaults;
-
 @property (strong, nonatomic) NSArray *playerKeys;
 @property (strong, nonatomic) NSArray *placeholderNames;
 @property (strong, nonatomic) NSArray *playerNameFields;
+
+@property (weak, nonatomic) IBOutlet UILabel *minimumLettersLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *minimumLettersControl;
+
+@property (weak, nonatomic) IBOutlet UILabel *rulesLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *rulesControl;
+
+@property (strong, nonatomic) NSUserDefaults *defaults;
+
 
 @end
 
@@ -58,6 +70,12 @@
     [self.defaults synchronize];
   }
   self.minimumLettersControl.selectedSegmentIndex = [self.defaults integerForKey:@"minimumLetters"];
+
+  if (![self.defaults objectForKey:@"rules"]) {
+    [self.defaults setInteger:0 forKey:@"rules"];
+    [self.defaults synchronize];
+  }
+  self.minimumLettersControl.selectedSegmentIndex = [self.defaults integerForKey:@"rules"];
   
   for (int i = 0; i < 2; i++) {
     
@@ -76,9 +94,13 @@
   }
 }
 
--(IBAction)minimumLettersChanged:(UISegmentedControl *)sender {
-  NSLog(@"selected segment is %li", (long)sender.selectedSegmentIndex);
-  [self.defaults setInteger:sender.selectedSegmentIndex forKey:@"minimumLetters"];
+-(IBAction)segmentedControlValueChanged:(UISegmentedControl *)sender {
+  
+  if (sender == self.minimumLettersControl) {
+    [self.defaults setInteger:sender.selectedSegmentIndex forKey:@"minimumLetters"];
+  } else if (sender == self.rulesControl) {
+    [self.defaults setInteger:sender.selectedSegmentIndex forKey:@"rules"];
+  }
   [self.defaults synchronize];
 }
 

@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *inputField;
 @property (weak, nonatomic) IBOutlet UIPickerView *wordListPicker;
 
-@property (strong, nonatomic) NSArray *wordListArray;
 @property (strong, nonatomic) WordLogic *logicEngine;
 @property (nonatomic) WordStatus myWordStatus;
 
@@ -29,7 +28,7 @@
   [super viewDidLoad];
 }
 
--(void)generateWordLists {
+-(void)preLoadModel {
   self.logicEngine = [[WordLogic alloc] init];
   self.logicEngine.delegate = self;
   [self.logicEngine generateWordLists];
@@ -58,11 +57,11 @@
 
 -(void)showWordInPicker:(NSString *)suggestedWord {
 
-  [self.wordListPicker selectRow:(suggestedWord ? self.logicEngine.pickerIndex : self.wordListArray.count) inComponent:0 animated:YES];
+  [self.wordListPicker selectRow:(suggestedWord ? [self.logicEngine.wordListArray indexOfObject:suggestedWord] : self.logicEngine.wordListArray.count) inComponent:0 animated:YES];
 }
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-  return self.wordListArray.count + 1;
+  return self.logicEngine.wordListArray.count + 1;
 }
 
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
@@ -70,7 +69,7 @@
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-  return (row == self.wordListArray.count) ? @"(no suggestion)" : self.wordListArray[row];
+  return (row == self.logicEngine.wordListArray.count) ? @"(no suggestion)" : self.logicEngine.wordListArray[row];
 }
 
 -(CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
@@ -79,14 +78,8 @@
 
 #pragma mark - word logic delegate methods
 
--(void)populatePickerWordListArrayWithString:(NSString *)string {
-  self.wordListArray = [string componentsSeparatedByString:@"\n"];
+-(void)populatePicker {
   [self.wordListPicker reloadAllComponents];
-}
-
--(void)establishWordStatus:(WordStatus)wordStatus {
-  self.myWordStatus = wordStatus;
-  NSLog(@"word status is %i", wordStatus);
 }
 
 #pragma mark - button methods

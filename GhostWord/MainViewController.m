@@ -18,7 +18,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *optionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *helpButton;
 @property (weak, nonatomic) IBOutlet UIButton *pvpButton;
-@property (weak, nonatomic) IBOutlet UIButton *pvcButton;
 
 @property (strong, nonatomic) OptionsViewController *optionsVC;
 @property (strong, nonatomic) HelpViewController *helpVC;
@@ -58,7 +57,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  [self.matchVC generateWordLists];
+  [self.matchVC preLoadModel];
   self.overlayEnabled = YES;
 }
 
@@ -135,8 +134,6 @@
   
   UIViewController *presentedVC;
   if (sender == self.pvpButton) {
-    presentedVC = self.matchVC;
-  } else if (sender == self.pvcButton) {
     presentedVC = self.matchVC;
   } else if (sender == self.optionsButton) {
     presentedVC = self.optionsVC;

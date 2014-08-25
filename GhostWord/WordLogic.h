@@ -10,22 +10,17 @@
 @class LetterNode;
 
 typedef enum wordStatus {
+  kNeutralStatus,
   kCompleteWord,
-  kIncompleteWord,
-  kNoPossibleWord,
-  kNeutralStatus
+  kNotCompleteWord
 } WordStatus;
 
 @protocol WordLogicDelegate;
 
 @interface WordLogic : NSObject
 
-@property (strong, nonatomic) LetterNode *trieRootNode;
 @property (weak, nonatomic) id<WordLogicDelegate> delegate;
-
-  // while populating trie, this variable is used to increment...
-  // afterwards, when searching through trie, this variable holds the picker view index
-@property (nonatomic) NSInteger pickerIndex;
+@property (strong, nonatomic) NSArray *wordListArray;
 
 -(NSString *)suggestCorrectWordForUserWord:(NSString *)userWord;
 -(void)generateWordLists;
@@ -34,8 +29,6 @@ typedef enum wordStatus {
 
 @protocol WordLogicDelegate <NSObject>
 
--(void)populatePickerWordListArrayWithString:(NSString *)string;
--(void)establishWordStatus:(WordStatus)wordStatus;
-
+-(void)populatePicker;
 
 @end
