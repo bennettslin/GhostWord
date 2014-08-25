@@ -23,8 +23,8 @@ typedef enum wordStatus {
 @property (strong, nonatomic) LetterNode *trieRootNode;
 @property (weak, nonatomic) id<WordLogicDelegate> delegate;
 
-  // while populating trie, this variable is used to increment
-  // when searching through trie, this variable holds the picker view index
+  // while populating trie, this variable is used to increment...
+  // afterwards, when searching through trie, this variable holds the picker view index
 @property (nonatomic) NSInteger pickerIndex;
 
 -(NSString *)suggestCorrectWordForUserWord:(NSString *)userWord;
