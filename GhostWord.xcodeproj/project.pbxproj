@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F7BD88919AAF61200AF8032 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BD88819AAF61200AF8032 /* OptionsViewController.m */; };
+		3F7BD88C19AAF62100AF8032 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BD88B19AAF62100AF8032 /* HelpViewController.m */; };
+		3F7BD88F19AAF93800AF8032 /* MatchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BD88E19AAF93800AF8032 /* MatchViewController.m */; };
+		3F7BD89119AB07DA00AF8032 /* Filmotype-Modern.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3F7BD89019AB075100AF8032 /* Filmotype-Modern.otf */; };
 		3F92827819AA85E6000D3791 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92827719AA85E6000D3791 /* main.m */; };
 		3F92827B19AA85E6000D3791 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92827A19AA85E6000D3791 /* AppDelegate.m */; };
 		3F92828119AA85E6000D3791 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F92827F19AA85E6000D3791 /* Main.storyboard */; };
@@ -14,7 +18,7 @@
 		3F92828F19AA85E6000D3791 /* GhostWordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92828E19AA85E6000D3791 /* GhostWordTests.m */; };
 		3F92829919AA87F4000D3791 /* en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3F92829819AA87F4000D3791 /* en.txt */; };
 		3F92829E19AA9713000D3791 /* LetterNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92829D19AA9713000D3791 /* LetterNode.m */; };
-		3F9282A019AA9727000D3791 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92829F19AA9727000D3791 /* ViewController.m */; };
+		3F9282A019AA9727000D3791 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92829F19AA9727000D3791 /* MainViewController.m */; };
 		3F9282A319AAB546000D3791 /* WordLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9282A219AAB546000D3791 /* WordLogic.m */; };
 /* End PBXBuildFile section */
 
@@ -29,12 +33,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F7BD88719AAF61200AF8032 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
+		3F7BD88819AAF61200AF8032 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
+		3F7BD88A19AAF62100AF8032 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
+		3F7BD88B19AAF62100AF8032 /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
+		3F7BD88D19AAF93800AF8032 /* MatchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchViewController.h; sourceTree = "<group>"; };
+		3F7BD88E19AAF93800AF8032 /* MatchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchViewController.m; sourceTree = "<group>"; };
+		3F7BD89019AB075100AF8032 /* Filmotype-Modern.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Filmotype-Modern.otf"; sourceTree = "<group>"; };
 		3F92827219AA85E6000D3791 /* GhostWord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GhostWord.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F92827619AA85E6000D3791 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F92827719AA85E6000D3791 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3F92827919AA85E6000D3791 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3F92827A19AA85E6000D3791 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3F92827C19AA85E6000D3791 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		3F92827C19AA85E6000D3791 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		3F92828019AA85E6000D3791 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3F92828219AA85E6000D3791 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3F92828819AA85E6000D3791 /* GhostWordTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GhostWordTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,7 +54,7 @@
 		3F92829819AA87F4000D3791 /* en.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = en.txt; sourceTree = "<group>"; };
 		3F92829C19AA9713000D3791 /* LetterNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LetterNode.h; sourceTree = "<group>"; };
 		3F92829D19AA9713000D3791 /* LetterNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetterNode.m; sourceTree = "<group>"; };
-		3F92829F19AA9727000D3791 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		3F92829F19AA9727000D3791 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		3F9282A119AAB546000D3791 /* WordLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordLogic.h; sourceTree = "<group>"; };
 		3F9282A219AAB546000D3791 /* WordLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordLogic.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,14 +101,17 @@
 				3F92827F19AA85E6000D3791 /* Main.storyboard */,
 				3F92827919AA85E6000D3791 /* AppDelegate.h */,
 				3F92827A19AA85E6000D3791 /* AppDelegate.m */,
-				3F92827C19AA85E6000D3791 /* ViewController.h */,
-				3F92829F19AA9727000D3791 /* ViewController.m */,
-				3F92829C19AA9713000D3791 /* LetterNode.h */,
-				3F92829D19AA9713000D3791 /* LetterNode.m */,
-				3F9282A119AAB546000D3791 /* WordLogic.h */,
-				3F9282A219AAB546000D3791 /* WordLogic.m */,
-				3F92828219AA85E6000D3791 /* Images.xcassets */,
+				3F92827C19AA85E6000D3791 /* MainViewController.h */,
+				3F92829F19AA9727000D3791 /* MainViewController.m */,
+				3F7BD88D19AAF93800AF8032 /* MatchViewController.h */,
+				3F7BD88E19AAF93800AF8032 /* MatchViewController.m */,
+				3F7BD88719AAF61200AF8032 /* OptionsViewController.h */,
+				3F7BD88819AAF61200AF8032 /* OptionsViewController.m */,
+				3F7BD88A19AAF62100AF8032 /* HelpViewController.h */,
+				3F7BD88B19AAF62100AF8032 /* HelpViewController.m */,
+				3F9282A419AAC922000D3791 /* Logic */,
 				3F92827519AA85E6000D3791 /* Supporting Files */,
+				3F92828219AA85E6000D3791 /* Images.xcassets */,
 			);
 			path = GhostWord;
 			sourceTree = "<group>";
@@ -105,6 +119,7 @@
 		3F92827519AA85E6000D3791 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3F7BD89019AB075100AF8032 /* Filmotype-Modern.otf */,
 				3F92829819AA87F4000D3791 /* en.txt */,
 				3F92827619AA85E6000D3791 /* Info.plist */,
 				3F92827719AA85E6000D3791 /* main.m */,
@@ -127,6 +142,17 @@
 				3F92828D19AA85E6000D3791 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3F9282A419AAC922000D3791 /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				3F92829C19AA9713000D3791 /* LetterNode.h */,
+				3F92829D19AA9713000D3791 /* LetterNode.m */,
+				3F9282A119AAB546000D3791 /* WordLogic.h */,
+				3F9282A219AAB546000D3791 /* WordLogic.m */,
+			);
+			name = Logic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,6 +237,7 @@
 			files = (
 				3F92829919AA87F4000D3791 /* en.txt in Resources */,
 				3F92828119AA85E6000D3791 /* Main.storyboard in Resources */,
+				3F7BD89119AB07DA00AF8032 /* Filmotype-Modern.otf in Resources */,
 				3F92828319AA85E6000D3791 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,9 +258,12 @@
 			files = (
 				3F92829E19AA9713000D3791 /* LetterNode.m in Sources */,
 				3F92827B19AA85E6000D3791 /* AppDelegate.m in Sources */,
-				3F9282A019AA9727000D3791 /* ViewController.m in Sources */,
+				3F9282A019AA9727000D3791 /* MainViewController.m in Sources */,
 				3F9282A319AAB546000D3791 /* WordLogic.m in Sources */,
+				3F7BD88F19AAF93800AF8032 /* MatchViewController.m in Sources */,
+				3F7BD88C19AAF62100AF8032 /* HelpViewController.m in Sources */,
 				3F92827819AA85E6000D3791 /* main.m in Sources */,
+				3F7BD88919AAF61200AF8032 /* OptionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

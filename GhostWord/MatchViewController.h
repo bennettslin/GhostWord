@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MatchViewController.h
 //  GhostWord
 //
 //  Created by Bennett Lin on 8/24/14.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface MatchViewController : UIViewController
 
 @end
-
