@@ -10,6 +10,8 @@
 
 @interface HelpViewController ()
 
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+
 @end
 
 @implementation HelpViewController

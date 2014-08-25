@@ -11,7 +11,7 @@
 @interface LetterNode : NSObject
 
 @property unichar myLetter;
-@property (strong, nonatomic) NSMutableArray *nextLetterChildNodes;
+@property (strong, nonatomic) NSArray *nextLetterChildNodes;
 @property NSUInteger lastLetterPickerIndex;
 
 -(id)initWithLetter:(unichar)myLetter;

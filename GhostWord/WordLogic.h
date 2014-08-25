@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 @class LetterNode;
 
-#define kFontModern @"FilmotypeModern"
-
 typedef enum wordStatus {
   kCompleteWord,
   kIncompleteWord,

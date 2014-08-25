@@ -1,21 +1,19 @@
 //
-//  ViewController.m
-//  EnergySavvySpellcheckChallenge
+//  MatchViewController.m
+//  GhostWord
 //
-//  Created by Bennett Lin on 5/12/14.
+//  Created by Bennett Lin on 8/24/14.
 //  Copyright (c) 2014 Bennett Lin. All rights reserved.
 //
 
 #import "MainViewController.h"
-#import "WordLogic.h"
 #import "OptionsViewController.h"
 #import "HelpViewController.h"
 #import "MatchViewController.h"
 
-@interface MainViewController () <WordLogicDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+#define kFontModern @"FilmotypeModern"
 
-@property (weak, nonatomic) IBOutlet UITextField *inputField;
-@property (weak, nonatomic) IBOutlet UIPickerView *wordListPicker;
+@interface MainViewController () <MatchDelegate, OptionsDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *optionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *helpButton;
@@ -27,12 +25,7 @@
 @property (strong, nonatomic) MatchViewController *matchVC;
 @property (strong, nonatomic) UIViewController *childVC;
 
-@property (strong, nonatomic) NSArray *wordListArray;
-@property (strong, nonatomic) WordLogic *logicEngine;
-@property (nonatomic) WordStatus myWordStatus;
-
 @property (weak, nonatomic) IBOutlet UILabel *titleLogo;
-
 @property (strong, nonatomic) UIButton *darkOverlay;
 @property (nonatomic) BOOL overlayEnabled;
 @property (nonatomic) BOOL vcIsAnimating;
@@ -43,27 +36,19 @@
 
 -(void)viewDidLoad {
   [super viewDidLoad];
-  
+
   self.titleLogo.font = [UIFont fontWithName:kFontModern size:24];
   
   self.matchVC = [self.storyboard instantiateViewControllerWithIdentifier:@"matchVC"];
-  self.matchVC.view.backgroundColor = [UIColor lightGrayColor];
+  self.matchVC.view.backgroundColor = [UIColor brownColor];
+  self.matchVC.delegate = self;
   
   self.helpVC = [self.storyboard instantiateViewControllerWithIdentifier:@"helpVC"];
   self.helpVC.view.backgroundColor = [UIColor purpleColor];
   
   self.optionsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"optionsVC"];
   self.optionsVC.view.backgroundColor = [UIColor blueColor];
-  
-  self.logicEngine = [[WordLogic alloc] init];
-  self.logicEngine.delegate = self;
-  [self.logicEngine generateWordLists];
-  
-  self.inputField.delegate = self;
-  self.inputField.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-  self.wordListPicker.delegate = self;
-  self.wordListPicker.dataSource = self;
+  self.optionsVC.delegate = self;
   
   self.darkOverlay = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
   [self.darkOverlay addTarget:self action:@selector(backToMain) forControlEvents:UIControlEventTouchDown];
@@ -71,52 +56,26 @@
   self.vcIsAnimating = NO;
 }
 
-#pragma mark - text field delegate methods
-
--(void)textFieldDidEndEditing:(UITextField *)textField {
-  NSString *suggestedWord = [self.logicEngine suggestCorrectWordForUserWord:textField.text];
-  [self showWordInPicker:suggestedWord];
-}
-
--(BOOL)textFieldShouldReturn:(UITextField *)textField {
-  [self.inputField resignFirstResponder];
-  return YES;
-}
-
-#pragma mark - picker methods
-
--(void)showWordInPicker:(NSString *)suggestedWord {
-
-  [self.wordListPicker selectRow:(suggestedWord ? self.logicEngine.pickerIndex : self.wordListArray.count) inComponent:0 animated:YES];
-}
-
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-  return self.wordListArray.count + 1;
-}
-
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-  return 1;
-}
-
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-  return (row == self.wordListArray.count) ? @"(no suggestion)" : self.wordListArray[row];
-}
-
--(CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
-  return 32.f;
+-(void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  [self.matchVC generateWordLists];
+  self.overlayEnabled = YES;
 }
 
 #pragma mark - view controller methods
 
 -(void)backToMain {
   
-  if (self.childVC) {
-    [self removeChildViewController:self.childVC];
-    self.childVC = nil;
-  }
-  
-  if (self.darkOverlay.superview) {
-    [self fadeOverlayIn:NO];
+  if (self.overlayEnabled) {
+    
+    if (self.childVC) {
+      [self removeChildViewController:self.childVC];
+      self.childVC = nil;
+    }
+    
+    self.darkOverlay.superview ? [self fadeOverlayIn:NO] : nil;
+  } else if (self.childVC == self.optionsVC) {
+    [self.optionsVC resignTextField:nil];
   }
 }
 
@@ -153,10 +112,20 @@
 -(void)removeChildViewController:(UIViewController *)childVC {
   
   [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseOut animations:^{
-    childVC.view.center = CGPointMake(self.view.center.x, self.view.center.y + self.view.bounds.size.height
-                                      );
+    childVC.view.center = CGPointMake(self.view.center.x, self.view.center.y + self.view.bounds.size.height);
   } completion:^(BOOL finished) {
     [childVC.view removeFromSuperview];
+  }];
+}
+
+-(void)presentMatchViewController {
+  self.vcIsAnimating = YES;
+  self.matchVC.view.center = CGPointMake(self.view.center.x, self.view.center.y - self.view.bounds.size.height);
+  [self.view addSubview:self.matchVC.view];
+  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:^{
+    self.matchVC.view.center = self.view.center;
+  } completion:^(BOOL finished) {
+    self.vcIsAnimating = NO;
   }];
 }
 
@@ -175,7 +144,24 @@
     presentedVC = self.helpVC;
   }
   
+  (presentedVC == self.matchVC) ?
+  [self presentMatchViewController] : // eventually change this to real segue
   [self presentChildViewController:presentedVC];
+}
+
+#pragma mark - match delegate methods
+
+-(void)helpButtonPressed {
+  [self presentChildViewController:self.helpVC];
+}
+
+-(void)backToMainMenu {
+  self.vcIsAnimating = YES;
+  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:^{
+    self.matchVC.view.center = CGPointMake(self.view.center.x, self.view.center.y + self.view.bounds.size.height);
+  } completion:^(BOOL finished) {
+    [self.matchVC.view removeFromSuperview];
+  }];
 }
 
 #pragma mark - overlay methods
@@ -199,15 +185,17 @@
   }
 }
 
-#pragma  mark - word logic delegate methods
-
--(void)populatePickerWordListArrayWithString:(NSString *)string {
-  self.wordListArray = [string componentsSeparatedByString:@"\n"];
-  [self.wordListPicker reloadAllComponents];
+-(void)enableOverlay {
+  self.overlayEnabled = YES;
 }
 
--(void)establishWordStatus:(WordStatus)wordStatus {
-  self.myWordStatus = wordStatus;
+-(void)disableOverlay {
+  self.overlayEnabled = NO;
+}
+
+-(void)didReceiveMemoryWarning {
+  [super didReceiveMemoryWarning];
+  // Dispose of any resources that can be recreated.
 }
 
 @end

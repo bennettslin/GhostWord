@@ -11,7 +11,8 @@
 
 @interface WordLogic ()
 
-@property (nonatomic) WordStatus tempWordStatus;
+//@property (nonatomic) WordStatus tempWordStatus;
+@property (strong, nonatomic) NSArray *wordListArray;
 
 @end
 
@@ -26,12 +27,30 @@
   return self;
 }
 
--(void)generateWordLists {
-  self.trieRootNode = [[LetterNode alloc] initWithLetter:'\n'];
-  [self loadWordListData];
+#pragma mark - array word check methods
+
+-(NSString *)suggestCorrectWordForUserWord:(NSString *)userWord {
+
+  for (NSString *listWord in self.wordListArray) {
+    
+      // if it's a complete word, return immediately
+    if ([listWord isEqualToString:userWord]) {
+//      self.tempWordStatus = kCompleteWord;
+      self.pickerIndex = [self.wordListArray indexOfObject:listWord];
+      [self.delegate establishWordStatus:kCompleteWord];
+      return listWord;
+    }
+  }
+
+//  self.tempWordStatus = kNoPossibleWord;
+
+    // without computer player, no possible word just means it's not a complete word
+  [self.delegate establishWordStatus:kNoPossibleWord];
+  return nil;
 }
 
-#pragma mark - word check methods
+/*
+#pragma mark - trie word check methods
 
 -(NSString *)suggestCorrectWordForUserWord:(NSString *)userWord {
   
@@ -83,8 +102,14 @@
     return nil;
   }
 }
+ */
 
-#pragma mark - word list and trie methods
+#pragma mark - generate word list methods
+
+-(void)generateWordLists {
+  self.trieRootNode = [[LetterNode alloc] initWithLetter:'\n'];
+  [self loadWordListData];
+}
 
 -(void)loadWordListData {
     // generate both the word list for the picker view and the word trie
@@ -92,13 +117,19 @@
   NSString *wordListPath = [[NSBundle mainBundle] pathForResource:@"en" ofType:@"txt"];
   NSString *wordListString = [NSString stringWithContentsOfFile:wordListPath encoding:NSUTF8StringEncoding error:&error];
   if (!error) {
-    [self generateWordTrieFromWordListString:wordListString];
+//    [self generateWordTrieFromWordListString:wordListString];
+    [self generateWordListArray:wordListString];
     [self.delegate populatePickerWordListArrayWithString:wordListString];
   } else {
     NSLog(@"Error: %@", error.localizedDescription);
   }
 }
 
+-(void)generateWordListArray:(NSString *)wordListString {
+  self.wordListArray = [wordListString componentsSeparatedByString:@"\n"];
+}
+
+/*
 -(void)generateWordTrieFromWordListString:(NSString *)wordListString {
   
   int i = 0;
@@ -140,5 +171,6 @@
   NSString *charString = [NSString stringWithFormat:@"%c", myChar];
   return [myString stringByAppendingString:charString];
 }
+ */
 
 @end

@@ -8,6 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol OptionsDelegate;
+
 @interface OptionsViewController : UIViewController
+
+@property (weak, nonatomic) id<OptionsDelegate> delegate;
+
+-(void)resignTextField:(UITextField *)textField;
+
+@end
+
+@protocol OptionsDelegate <NSObject>
+
+-(void)disableOverlay;
+-(void)enableOverlay;
 
 @end

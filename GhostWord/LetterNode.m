@@ -21,7 +21,7 @@
     
       // only last letter has picker index
     self.lastLetterPickerIndex = -1;
-    self.nextLetterChildNodes = [[NSMutableArray alloc] initWithCapacity:1];
+    self.nextLetterChildNodes = [[NSArray alloc] init];
   }
   
   return self;
@@ -44,7 +44,7 @@
     
       // and create new child node and return it
     LetterNode *nextLetterNode = [[LetterNode alloc] initWithLetter:nextLetter];
-    [self.nextLetterChildNodes addObject:nextLetterNode];
+    [self addToNextLetterNodes:nextLetterNode];
     return nextLetterNode;
   }
 
@@ -67,6 +67,12 @@
   int shift = (thisLetter - 'A') % 32;
   
   return (nextLetters[index] & (1 << shift));
+}
+
+-(void)addToNextLetterNodes:(LetterNode *)nextLetterNode {
+  NSMutableArray *tempArray = [NSMutableArray arrayWithArray:self.nextLetterChildNodes];
+  [tempArray addObject:nextLetterNode];
+  self.nextLetterChildNodes = [NSArray arrayWithArray:tempArray];
 }
 
 @end

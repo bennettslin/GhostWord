@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MatchViewController.h
 //  GhostWord
 //
 //  Created by Bennett Lin on 8/24/14.
@@ -10,6 +10,4 @@
 
 @interface MainViewController : UIViewController
 
-
 @end
-
