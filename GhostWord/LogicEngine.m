@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 Bennett Lin. All rights reserved.
 //
 
-#import "WordLogic.h"
+#import "LogicEngine.h"
 #import "LetterNode.h"
 
-@interface WordLogic ()
+@interface LogicEngine ()
 
 @property (strong, nonatomic) NSSet *wordListSet;
 
 @end
 
-@implementation WordLogic
+@implementation LogicEngine
 
 -(id)init {
   self = [super init];
@@ -57,8 +57,20 @@
 }
 
 -(void)generateWordListArray:(NSString *)wordListString {
+  
   self.wordListArray = [wordListString componentsSeparatedByString:@"\n"];
   self.wordListSet = [NSSet setWithArray:self.wordListArray];
+  
+    // longest word is 28
+  /*
+  NSUInteger length = 0;
+  for (NSString *word in self.wordListSet) {
+    if (word.length > length) {
+      length = word.length;
+    }
+  }
+  NSLog(@"longest word is %i", length);
+   */
 }
 
 @end

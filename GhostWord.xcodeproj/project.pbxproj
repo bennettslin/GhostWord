@@ -19,7 +19,13 @@
 		3F92829919AA87F4000D3791 /* en.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3F92829819AA87F4000D3791 /* en.txt */; };
 		3F92829E19AA9713000D3791 /* LetterNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92829D19AA9713000D3791 /* LetterNode.m */; };
 		3F9282A019AA9727000D3791 /* MatchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F92829F19AA9727000D3791 /* MatchViewController.m */; };
-		3F9282A319AAB546000D3791 /* WordLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9282A219AAB546000D3791 /* WordLogic.m */; };
+		3F9282A319AAB546000D3791 /* LogicEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9282A219AAB546000D3791 /* LogicEngine.m */; };
+		3FBA929C19ABE2A900320CA0 /* LetterTile.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA929B19ABE2A900320CA0 /* LetterTile.m */; };
+		3FBA929F19ABE61A00320CA0 /* SceneEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA929E19ABE61A00320CA0 /* SceneEngine.m */; };
+		3FBA92A219ABE62700320CA0 /* TurnEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA92A119ABE62700320CA0 /* TurnEngine.m */; };
+		3FBA92A519ABE74800320CA0 /* Field.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA92A419ABE74800320CA0 /* Field.m */; };
+		3FBA92A819ABE75E00320CA0 /* TileField.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA92A719ABE75E00320CA0 /* TileField.m */; };
+		3FBA92AB19ABE7A700320CA0 /* WordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA92AA19ABE7A700320CA0 /* WordField.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,8 +61,21 @@
 		3F92829C19AA9713000D3791 /* LetterNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LetterNode.h; sourceTree = "<group>"; };
 		3F92829D19AA9713000D3791 /* LetterNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetterNode.m; sourceTree = "<group>"; };
 		3F92829F19AA9727000D3791 /* MatchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchViewController.m; sourceTree = "<group>"; };
-		3F9282A119AAB546000D3791 /* WordLogic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordLogic.h; sourceTree = "<group>"; };
-		3F9282A219AAB546000D3791 /* WordLogic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordLogic.m; sourceTree = "<group>"; };
+		3F9282A119AAB546000D3791 /* LogicEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogicEngine.h; sourceTree = "<group>"; };
+		3F9282A219AAB546000D3791 /* LogicEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogicEngine.m; sourceTree = "<group>"; };
+		3FBA929A19ABE2A900320CA0 /* LetterTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LetterTile.h; sourceTree = "<group>"; };
+		3FBA929B19ABE2A900320CA0 /* LetterTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetterTile.m; sourceTree = "<group>"; };
+		3FBA929D19ABE61A00320CA0 /* SceneEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneEngine.h; sourceTree = "<group>"; };
+		3FBA929E19ABE61A00320CA0 /* SceneEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneEngine.m; sourceTree = "<group>"; };
+		3FBA92A019ABE62700320CA0 /* TurnEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TurnEngine.h; sourceTree = "<group>"; };
+		3FBA92A119ABE62700320CA0 /* TurnEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TurnEngine.m; sourceTree = "<group>"; };
+		3FBA92A319ABE74800320CA0 /* Field.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Field.h; sourceTree = "<group>"; };
+		3FBA92A419ABE74800320CA0 /* Field.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Field.m; sourceTree = "<group>"; };
+		3FBA92A619ABE75E00320CA0 /* TileField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileField.h; sourceTree = "<group>"; };
+		3FBA92A719ABE75E00320CA0 /* TileField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TileField.m; sourceTree = "<group>"; };
+		3FBA92A919ABE7A700320CA0 /* WordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordField.h; sourceTree = "<group>"; };
+		3FBA92AA19ABE7A700320CA0 /* WordField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordField.m; sourceTree = "<group>"; };
+		3FBA92AC19ABEC3000320CA0 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +117,7 @@
 		3F92827419AA85E6000D3791 /* GhostWord */ = {
 			isa = PBXGroup;
 			children = (
+				3FBA92AC19ABEC3000320CA0 /* Constants.h */,
 				3F92827F19AA85E6000D3791 /* Main.storyboard */,
 				3F92827919AA85E6000D3791 /* AppDelegate.h */,
 				3F92827A19AA85E6000D3791 /* AppDelegate.m */,
@@ -110,6 +130,7 @@
 				3F7BD88A19AAF62100AF8032 /* HelpViewController.h */,
 				3F7BD88B19AAF62100AF8032 /* HelpViewController.m */,
 				3F9282A419AAC922000D3791 /* Logic */,
+				3FBA929919ABE28500320CA0 /* Views */,
 				3F92827519AA85E6000D3791 /* Supporting Files */,
 				3F92828219AA85E6000D3791 /* Images.xcassets */,
 			);
@@ -149,10 +170,29 @@
 			children = (
 				3F92829C19AA9713000D3791 /* LetterNode.h */,
 				3F92829D19AA9713000D3791 /* LetterNode.m */,
-				3F9282A119AAB546000D3791 /* WordLogic.h */,
-				3F9282A219AAB546000D3791 /* WordLogic.m */,
+				3F9282A119AAB546000D3791 /* LogicEngine.h */,
+				3F9282A219AAB546000D3791 /* LogicEngine.m */,
+				3FBA92A019ABE62700320CA0 /* TurnEngine.h */,
+				3FBA92A119ABE62700320CA0 /* TurnEngine.m */,
 			);
 			name = Logic;
+			sourceTree = "<group>";
+		};
+		3FBA929919ABE28500320CA0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3FBA92A319ABE74800320CA0 /* Field.h */,
+				3FBA92A419ABE74800320CA0 /* Field.m */,
+				3FBA92A619ABE75E00320CA0 /* TileField.h */,
+				3FBA92A719ABE75E00320CA0 /* TileField.m */,
+				3FBA92A919ABE7A700320CA0 /* WordField.h */,
+				3FBA92AA19ABE7A700320CA0 /* WordField.m */,
+				3FBA929A19ABE2A900320CA0 /* LetterTile.h */,
+				3FBA929B19ABE2A900320CA0 /* LetterTile.m */,
+				3FBA929D19ABE61A00320CA0 /* SceneEngine.h */,
+				3FBA929E19ABE61A00320CA0 /* SceneEngine.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,11 +298,17 @@
 			files = (
 				3F92829E19AA9713000D3791 /* LetterNode.m in Sources */,
 				3F92827B19AA85E6000D3791 /* AppDelegate.m in Sources */,
+				3FBA929F19ABE61A00320CA0 /* SceneEngine.m in Sources */,
 				3F9282A019AA9727000D3791 /* MatchViewController.m in Sources */,
-				3F9282A319AAB546000D3791 /* WordLogic.m in Sources */,
+				3F9282A319AAB546000D3791 /* LogicEngine.m in Sources */,
 				3F7BD88F19AAF93800AF8032 /* MainViewController.m in Sources */,
+				3FBA92A519ABE74800320CA0 /* Field.m in Sources */,
 				3F7BD88C19AAF62100AF8032 /* HelpViewController.m in Sources */,
 				3F92827819AA85E6000D3791 /* main.m in Sources */,
+				3FBA92A819ABE75E00320CA0 /* TileField.m in Sources */,
+				3FBA92AB19ABE7A700320CA0 /* WordField.m in Sources */,
+				3FBA92A219ABE62700320CA0 /* TurnEngine.m in Sources */,
+				3FBA929C19ABE2A900320CA0 /* LetterTile.m in Sources */,
 				3F7BD88919AAF61200AF8032 /* OptionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

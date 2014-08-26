@@ -15,11 +15,11 @@ typedef enum wordStatus {
   kNotCompleteWord
 } WordStatus;
 
-@protocol WordLogicDelegate;
+@protocol LogicDelegate;
 
-@interface WordLogic : NSObject
+@interface LogicEngine : NSObject
 
-@property (weak, nonatomic) id<WordLogicDelegate> delegate;
+@property (weak, nonatomic) id<LogicDelegate> delegate;
 @property (strong, nonatomic) NSArray *wordListArray;
 
 -(NSString *)suggestCorrectWordForUserWord:(NSString *)userWord;
@@ -27,7 +27,7 @@ typedef enum wordStatus {
 
 @end
 
-@protocol WordLogicDelegate <NSObject>
+@protocol LogicDelegate <NSObject>
 
 -(void)populatePicker;
 

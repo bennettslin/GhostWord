@@ -10,8 +10,7 @@
 #import "OptionsViewController.h"
 #import "HelpViewController.h"
 #import "MatchViewController.h"
-
-#define kFontModern @"FilmotypeModern"
+#import "Constants.h"
 
 @interface MainViewController () <MatchDelegate, OptionsDelegate>
 
@@ -35,11 +34,12 @@
 
 -(void)viewDidLoad {
   [super viewDidLoad];
+  
+  self.view.backgroundColor = [UIColor brownColor];
 
   self.titleLogo.font = [UIFont fontWithName:kFontModern size:24];
   
   self.matchVC = [self.storyboard instantiateViewControllerWithIdentifier:@"matchVC"];
-  self.matchVC.view.backgroundColor = [UIColor brownColor];
   self.matchVC.delegate = self;
   
   self.helpVC = [self.storyboard instantiateViewControllerWithIdentifier:@"helpVC"];
@@ -80,7 +80,6 @@
 
 -(void)presentChildViewController:(UIViewController *)childVC {
   
-  self.vcIsAnimating = YES;
   (self.childVC && self.childVC != childVC) ? [self removeChildViewController:self.childVC] : nil;
   self.childVC = childVC;
   
@@ -92,7 +91,6 @@
   CGFloat viewHeight = self.view.bounds.size.height * 3 / 5;
   
   childVC.view.frame = CGRectMake(0, 0, viewWidth, viewHeight);
-  childVC.view.center = CGPointMake(self.view.center.x, self.view.center.y - self.view.bounds.size.height);
   childVC.view.layer.cornerRadius = 20.f;
   childVC.view.layer.masksToBounds = YES;
   
@@ -101,7 +99,9 @@
 }
 
 -(void)animatePresentVC:(UIViewController *)childVC {
-  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:^{
+  self.vcIsAnimating = YES;
+  childVC.view.center = CGPointMake(self.view.center.x, self.view.center.y + self.view.bounds.size.height);
+  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
     childVC.view.center = self.view.center;
   } completion:^(BOOL finished) {
     self.vcIsAnimating = NO;
@@ -110,7 +110,7 @@
 
 -(void)removeChildViewController:(UIViewController *)childVC {
   
-  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseOut animations:^{
+  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
     childVC.view.center = CGPointMake(self.view.center.x, self.view.center.y + self.view.bounds.size.height);
   } completion:^(BOOL finished) {
     [childVC.view removeFromSuperview];
@@ -121,7 +121,7 @@
   self.vcIsAnimating = YES;
   self.matchVC.view.center = CGPointMake(self.view.center.x, self.view.center.y - self.view.bounds.size.height);
   [self.view addSubview:self.matchVC.view];
-  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:^{
+  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
     self.matchVC.view.center = self.view.center;
   } completion:^(BOOL finished) {
     self.vcIsAnimating = NO;
@@ -154,10 +154,11 @@
 
 -(void)backToMainMenu {
   self.vcIsAnimating = YES;
-  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseIn animations:^{
-    self.matchVC.view.center = CGPointMake(self.view.center.x, self.view.center.y + self.view.bounds.size.height);
+  [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    self.matchVC.view.center = CGPointMake(self.view.center.x, self.view.center.y - self.view.bounds.size.height);
   } completion:^(BOOL finished) {
     [self.matchVC.view removeFromSuperview];
+    self.vcIsAnimating = NO;
   }];
 }
 

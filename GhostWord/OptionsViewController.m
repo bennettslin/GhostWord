@@ -17,8 +17,7 @@
 typedef enum gameRules {
   kRulesGhost,
   kRulesSuper,
-  kRulesDuper,
-  kRulesXGhost
+  kRulesDuper
 } GameRules;
 
 @interface OptionsViewController () <UITextFieldDelegate>
@@ -75,7 +74,7 @@ typedef enum gameRules {
     [self.defaults setInteger:0 forKey:@"rules"];
     [self.defaults synchronize];
   }
-  self.minimumLettersControl.selectedSegmentIndex = [self.defaults integerForKey:@"rules"];
+  self.rulesControl.selectedSegmentIndex = [self.defaults integerForKey:@"rules"];
   
   for (int i = 0; i < 2; i++) {
     
@@ -133,7 +132,6 @@ typedef enum gameRules {
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
-
   [self.delegate disableOverlay];
 }
 
