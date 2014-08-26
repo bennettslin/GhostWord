@@ -16,7 +16,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *optionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *helpButton;
-@property (weak, nonatomic) IBOutlet UIButton *pvpButton;
 
 @property (strong, nonatomic) OptionsViewController *optionsVC;
 @property (strong, nonatomic) HelpViewController *helpVC;
@@ -50,9 +49,19 @@
   self.optionsVC.delegate = self;
   
   self.darkOverlay = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
-  [self.darkOverlay addTarget:self action:@selector(backToMain) forControlEvents:UIControlEventTouchDown];
+  [self.darkOverlay addTarget:self action:@selector(fromDarkOverlayBackToMain) forControlEvents:UIControlEventTouchDown];
   
   self.vcIsAnimating = NO;
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(decideToPresentMatchVC) name:UIApplicationDidBecomeActiveNotification object:nil];
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeChildVCWithoutAnimation) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+-(void)decideToPresentMatchVC {
+  if ([[NSUserDefaults standardUserDefaults] objectForKey:@"word"]) {
+    [self presentMatchViewController];
+  }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -63,19 +72,23 @@
 
 #pragma mark - view controller methods
 
--(void)backToMain {
+-(void)fromDarkOverlayBackToMain {
   
   if (self.overlayEnabled) {
-    
-    if (self.childVC) {
-      [self removeChildViewController:self.childVC];
-      self.childVC = nil;
-    }
-    
-    self.darkOverlay.superview ? [self fadeOverlayIn:NO] : nil;
+    [self removeChildVCWithoutAnimation];
+
   } else if (self.childVC == self.optionsVC) {
     [self.optionsVC resignTextField:nil];
   }
+}
+
+-(void)removeChildVCWithoutAnimation {
+  if (self.childVC) {
+    [self removeChildViewController:self.childVC];
+    self.childVC = nil;
+  }
+  
+  self.darkOverlay.superview ? [self.darkOverlay removeFromSuperview] : nil;
 }
 
 -(void)presentChildViewController:(UIViewController *)childVC {
@@ -88,7 +101,7 @@
   }
   
   CGFloat viewWidth = self.view.bounds.size.width * 4 / 5;
-  CGFloat viewHeight = self.view.bounds.size.height * 3 / 5;
+  CGFloat viewHeight = self.view.bounds.size.height * 4 / 5;
   
   childVC.view.frame = CGRectMake(0, 0, viewWidth, viewHeight);
   childVC.view.layer.cornerRadius = 20.f;
@@ -118,6 +131,13 @@
 }
 
 -(void)presentMatchViewController {
+  
+  if (self.childVC) {
+    [self removeChildViewController:self.childVC];
+    self.childVC = nil;
+    [self fadeOverlayIn:NO];
+  }
+  
   self.vcIsAnimating = YES;
   self.matchVC.view.center = CGPointMake(self.view.center.x, self.view.center.y - self.view.bounds.size.height);
   [self.view addSubview:self.matchVC.view];
@@ -133,16 +153,12 @@
 -(IBAction)buttonPressed:(id)sender {
   
   UIViewController *presentedVC;
-  if (sender == self.pvpButton) {
-    presentedVC = self.matchVC;
-  } else if (sender == self.optionsButton) {
+  if (sender == self.optionsButton) {
     presentedVC = self.optionsVC;
   } else if (sender == self.helpButton) {
     presentedVC = self.helpVC;
   }
-  
-  (presentedVC == self.matchVC) ?
-  [self presentMatchViewController] : // eventually change this to real segue
+
   [self presentChildViewController:presentedVC];
 }
 
@@ -185,11 +201,6 @@
 
 -(void)enableOverlay:(BOOL)enable {
   self.overlayEnabled = enable;
-}
-
--(void)didReceiveMemoryWarning {
-  [super didReceiveMemoryWarning];
-  // Dispose of any resources that can be recreated.
 }
 
 @end

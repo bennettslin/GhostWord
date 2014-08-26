@@ -7,12 +7,7 @@
 //
 
 #import "OptionsViewController.h"
-
-#define kPlaceholder1Name @"Player 1"
-#define kPlaceholder2Name @"Player 2"
-
-#define kPlayer1Key @"player1Name"
-#define kPlayer2Key @"player2Name"
+#import "Constants.h"
 
 typedef enum gameRules {
   kRulesGhost,
@@ -34,6 +29,8 @@ typedef enum gameRules {
 
 @property (weak, nonatomic) IBOutlet UILabel *rulesLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *rulesControl;
+
+@property (weak, nonatomic) IBOutlet UIButton *startGameButton;
 
 @property (strong, nonatomic) NSUserDefaults *defaults;
 
@@ -167,6 +164,10 @@ typedef enum gameRules {
     }
   }
   return nil;
+}
+
+-(IBAction)startGameTapped:(id)sender {
+  [self.delegate presentMatchViewController];
 }
 
 

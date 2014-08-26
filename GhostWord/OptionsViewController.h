@@ -21,5 +21,6 @@
 @protocol OptionsDelegate <NSObject>
 
 -(void)enableOverlay:(BOOL)enable;
+-(void)presentMatchViewController;
 
 @end

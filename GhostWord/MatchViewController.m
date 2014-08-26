@@ -15,7 +15,7 @@
 #import "LetterTile.h"
 #import "TurnEngine.h"
 
-@interface MatchViewController () <LogicDelegate>
+@interface MatchViewController () <LogicDelegate, TurnEngineDelegate>
 
 @property (strong, nonatomic) TurnEngine *turnEngine;
 @property (strong, nonatomic) LogicEngine *logicEngine;
@@ -29,6 +29,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *resignButton;
 @property (weak, nonatomic) IBOutlet UIButton *testButton;
 
+@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+
 @property (strong, nonatomic) WordField *wordField;
 @property (strong, nonatomic) TileField *tileField;
 @property (strong, nonatomic) Field *gameOverField;
@@ -38,6 +40,7 @@
   // pointers
 @property (strong, nonatomic) LetterTile *touchedTile;
 @property (strong, nonatomic) LetterTile *recentTile;
+@property (strong, nonatomic) NSUserDefaults *defaults;
 
   // bools
 @property (nonatomic) BOOL challengeMode;
@@ -49,17 +52,28 @@
 -(void)viewDidLoad {
   
   [super viewDidLoad];
-  self.wordArray = [NSMutableArray new];
+  if (!self.wordArray) {
+    self.wordArray = [NSMutableArray new];
+    self.defaults = [NSUserDefaults standardUserDefaults];
+  }
   [self loadViews];
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveGame) name:UIApplicationDidEnterBackgroundNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveGame) name:UIApplicationWillTerminateNotification object:nil];
 }
 
 -(void)preLoadModel {
   
-  self.turnEngine = [TurnEngine new];
+  if (!self.turnEngine) {
+    self.turnEngine = [TurnEngine new];
+    self.turnEngine.delegate = self;
+  }
   
-  self.logicEngine = [[LogicEngine alloc] init];
-  self.logicEngine.delegate = self;
-  [self.logicEngine generateWordLists];
+  if (!self.logicEngine) {
+    self.logicEngine = [[LogicEngine alloc] init];
+    self.logicEngine.delegate = self;
+    [self.logicEngine generateWordLists];
+  }
 }
 
 -(void)loadViews {
@@ -78,10 +92,40 @@
   self.gameOverField.backgroundColor = [UIColor purpleColor];
   self.gameOverField.hidden = YES;
   [self.view addSubview:self.gameOverField];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  [self.turnEngine handleWhetherToStartOrContinueGame];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+  [super viewWillDisappear:animated];
   
+  [self.wordArray removeAllObjects];
+  
+  for (LetterTile *tile in self.tileField.subviews) {
+    [tile removeFromSuperview];
+  }
+  
+  [self.turnEngine saveTurnData];
+}
+
+-(void)setupNewKeyboard {
   for (int i = 0; i < 26; i++) {
     [self addNewLetterTileForChar:'a' + i];
   }
+}
+
+-(void)setupWordFieldForSavedGame {
+  [self.wordArray removeAllObjects];
+  for (int i = 0; i < self.turnEngine.currentWord.length; i++) {
+    unichar myChar = [self.turnEngine.currentWord characterAtIndex:i];
+    LetterTile *tile = [self addNewLetterTileForChar:myChar];
+    [tile finalise];
+    [self.wordArray addObject:tile];
+  }
+  [self repositionWordArrayTiles];
 }
 
 #pragma mark - touch methods
@@ -92,10 +136,8 @@
     CGPoint locationPoint = [[touches anyObject] locationInView:self.view];
     UIView *touchedView = [self.view hitTest:locationPoint withEvent:event];
 
-    NSLog(@"touched view is %@", touchedView);
     if ([touchedView isKindOfClass:LetterTile.class]) {
       LetterTile *tile = (LetterTile *)touchedView;
-      NSLog(@"touched tile %i", tile.myChar);
       [tile beginTouch];
       CGPoint locationInField = [[touches anyObject] locationInView:self.tileField];
       tile.center = locationInField;
@@ -116,14 +158,11 @@
         [self sendTileHome:self.recentTile];
         self.recentTile = nil;
       }
-      
       [self addToWordArrayTile:self.touchedTile];
       
       // touched tile out of wordField
     } else {
-      
       [self removeFromWordArrayTile:self.touchedTile];
-      
     }
   }
 }
@@ -195,23 +234,27 @@
   [self repositionWordArrayTiles];
 }
 
--(NSString *)wordFromWordArray {
+  // countRecentTile bool not necessary after testing
+-(NSString *)wordFromWordArrayCountingRecentTile:(BOOL)countRecentTile {
   NSString *string = @"";
   for (int i = 0; i < self.wordArray.count; i++) {
     LetterTile *tile = self.wordArray[i];
-    string = [string stringByAppendingString:tile.text];
+    if (tile != self.recentTile) {
+      string = [string stringByAppendingString:tile.text];
+    }
   }
   return string;
 }
 
 #pragma mark - tile movement and placement methods
 
--(void)addNewLetterTileForChar:(unichar)myChar {
+-(LetterTile *)addNewLetterTileForChar:(unichar)myChar {
   int i = myChar - 'a';
   LetterTile *tile = [[LetterTile alloc] initWithChar:myChar];
   tile.homeCenter = CGPointMake((self.view.bounds.size.width - (kTileWidth * 1.1 * 7)) / 2 + ((i % 7) + (i < 21 ? 0.5 : 1.5)) * (kTileWidth * 1.1), ((i / 7) + 0.5) * (kTileHeight * 1.1) + kWordFieldHeight);
   tile.center = tile.homeCenter;
   [self.tileField addSubview:tile];
+  return tile;
 }
 
 -(void)sendTileToWordField:(LetterTile *)tile {
@@ -281,14 +324,16 @@
 }
 
 -(void)handleWordReverse {
-  NSUInteger frontIndex = 0;
-  NSUInteger backIndex = self.wordArray.count - 1;
-  while (frontIndex < backIndex) {
-    [self.wordArray exchangeObjectAtIndex:frontIndex withObjectAtIndex:backIndex];
-    frontIndex++;
-    backIndex--;
+  if (self.wordArray.count > 0) {
+    NSUInteger frontIndex = 0;
+    NSUInteger backIndex = self.wordArray.count - 1;
+    while (frontIndex < backIndex) {
+      [self.wordArray exchangeObjectAtIndex:frontIndex withObjectAtIndex:backIndex];
+      frontIndex++;
+      backIndex--;
+    }
+    [self repositionWordArrayTiles];
   }
-  [self repositionWordArrayTiles];
 }
 
 #pragma mark - turn methods
@@ -297,30 +342,50 @@
   
   [self.recentTile finalise];
   [self addNewLetterTileForChar:self.recentTile.myChar];
-  
   if (self.recentTile) {
-    self.recentTile.userInteractionEnabled = NO;
     self.recentTile = nil;
   }
   
+  [self.turnEngine handleCompletionOfTurnWithChallenge:self.challengeMode];
   [self repositionWordArrayTiles];
+}
+
+-(void)updateMessageLabel {
+  NSString *playerName = (self.turnEngine.currentPlayer == kPlayer1) ?
+      [self.defaults objectForKey:kPlayer1Key] : [self.defaults objectForKey:kPlayer2Key];
+  self.messageLabel.text = !self.turnEngine.challengeMode ?
+  [NSString stringWithFormat:@"%@, it's your turn!", playerName] :
+  [NSString stringWithFormat:@"%@, you've been challenged!", playerName];
+}
+
+-(void)showWonGame {
+  [self.delegate backToMainMenu];
 }
 
 #pragma mark - button methods
 
 -(IBAction)buttonPressed:(id)sender {
   if (sender == self.mainMenuButton) {
+      // this will eventually be disabled
+    [self.turnEngine saveTurnData];
     [self.delegate backToMainMenu];
   } else if (sender == self.helpButton) {
     [self.delegate helpButtonPressed];
   } else if (sender == self.challengeButton) {
+    if (!self.recentTile) {
+      
+        // enter code
+      
+    }
     
   } else if (sender == self.reverseButton) {
     [self handleWordReverse];
   } else if (sender == self.resignButton) {
-  
+    [self.turnEngine handleEndOfGame];
   } else if (sender == self.doneButton) {
-    [self handleTurnDone];
+    if (self.recentTile) {
+      [self handleTurnDone];
+    }
     
   } else if (sender == self.testButton) {
     [self testButtonPressed];
@@ -329,8 +394,19 @@
 
 -(void)testButtonPressed {
 
-  NSLog(@"word array count is %lu", (unsigned long)self.wordArray.count);
-  NSLog(@"string is %@", [self wordFromWordArray]);
+//  NSLog(@"word array count is %lu", (unsigned long)self.wordArray.count);
+  NSLog(@"string is %@", [self wordFromWordArrayCountingRecentTile:YES]);
+}
+
+#pragma mark - system methods
+
+-(void)didReceiveMemoryWarning {
+  [super didReceiveMemoryWarning];
+  [self saveGame];
+}
+
+-(void)saveGame {
+  [self.turnEngine saveTurnData];
 }
 
 @end

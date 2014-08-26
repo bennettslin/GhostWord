@@ -57,6 +57,7 @@
 
 -(void)finalise {
   self.backgroundColor = [UIColor redColor];
+  self.userInteractionEnabled = NO;
 }
 
 -(void)definalise {

@@ -23,4 +23,10 @@
 #define kTileNormalColour [UIColor cyanColor]
 #define kTileTouchedColour [UIColor yellowColor]
 
+#define kPlaceholder1Name @"Player 1"
+#define kPlaceholder2Name @"Player 2"
+
+#define kPlayer1Key @"player1Name"
+#define kPlayer2Key @"player2Name"
+
 #endif
