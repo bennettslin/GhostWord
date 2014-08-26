@@ -20,7 +20,6 @@
 
 @protocol OptionsDelegate <NSObject>
 
--(void)disableOverlay;
--(void)enableOverlay;
+-(void)enableOverlay:(BOOL)enable;
 
 @end

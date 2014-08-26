@@ -15,14 +15,10 @@
 #import "LetterTile.h"
 #import "TurnEngine.h"
 
-@interface MatchViewController () <LogicDelegate, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
-
-@property (weak, nonatomic) IBOutlet UITextField *inputField;
-@property (weak, nonatomic) IBOutlet UIPickerView *wordListPicker;
+@interface MatchViewController () <LogicDelegate>
 
 @property (strong, nonatomic) TurnEngine *turnEngine;
 @property (strong, nonatomic) LogicEngine *logicEngine;
-//@property (nonatomic) WordStatus myWordStatus;
 
 @property (weak, nonatomic) IBOutlet UIButton *mainMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *helpButton;
@@ -31,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *challengeButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *resignButton;
+@property (weak, nonatomic) IBOutlet UIButton *testButton;
 
 @property (strong, nonatomic) WordField *wordField;
 @property (strong, nonatomic) TileField *tileField;
@@ -63,15 +60,7 @@
   self.logicEngine = [[LogicEngine alloc] init];
   self.logicEngine.delegate = self;
   [self.logicEngine generateWordLists];
-  
-  self.inputField.delegate = self;
-  self.inputField.clearButtonMode = UITextFieldViewModeWhileEditing;
-  
-  self.wordListPicker.delegate = self;
-  self.wordListPicker.dataSource = self;
 }
-
-#pragma mark - load view methods
 
 -(void)loadViews {
   
@@ -80,7 +69,7 @@
   self.wordField.backgroundColor = [UIColor greenColor];
   [self.view addSubview:self.wordField];
   
-  CGRect fieldRect = CGRectMake(0, self.view.bounds.size.height - kTileFieldHeight, self.view.bounds.size.width, kTileFieldHeight); // hard coded for now
+  CGRect fieldRect = CGRectMake(0, self.view.bounds.size.height - kTileFieldHeight - kWordFieldHeight, self.view.bounds.size.width, kTileFieldHeight + kWordFieldHeight); // hard coded for now
   self.tileField = [[TileField alloc] initWithFrame:fieldRect];
   self.tileField.backgroundColor = [UIColor blueColor];
   [self.view addSubview:self.tileField];
@@ -91,8 +80,7 @@
   [self.view addSubview:self.gameOverField];
   
   for (int i = 0; i < 26; i++) {
-    LetterTile *tile = [[LetterTile alloc] initWithChar:('a' + i)];
-    [self.tileField addSubview:tile];
+    [self addNewLetterTileForChar:'a' + i];
   }
 }
 
@@ -104,8 +92,10 @@
     CGPoint locationPoint = [[touches anyObject] locationInView:self.view];
     UIView *touchedView = [self.view hitTest:locationPoint withEvent:event];
 
+    NSLog(@"touched view is %@", touchedView);
     if ([touchedView isKindOfClass:LetterTile.class]) {
       LetterTile *tile = (LetterTile *)touchedView;
+      NSLog(@"touched tile %i", tile.myChar);
       [tile beginTouch];
       CGPoint locationInField = [[touches anyObject] locationInView:self.tileField];
       tile.center = locationInField;
@@ -119,22 +109,41 @@
   if (self.touchedTile) {
     CGPoint locationInField = [[touches anyObject] locationInView:self.tileField];
     self.touchedTile.center = locationInField;
+    
+      // touched tile moved to wordField
+    if ([self touchedTileIsInWordField]) {
+      if (self.recentTile && self.touchedTile != self.recentTile) {
+        [self sendTileHome:self.recentTile];
+        self.recentTile = nil;
+      }
+      
+      [self addToWordArrayTile:self.touchedTile];
+      
+      // touched tile out of wordField
+    } else {
+      
+      [self removeFromWordArrayTile:self.touchedTile];
+      
+    }
   }
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
   if (self.touchedTile) {
     
-      // in correct position in rack
-    BOOL tileIsInWordField = (self.touchedTile.center.y < 0 &&
-                              self.touchedTile.center.y > -kWordFieldHeight);
-    if (tileIsInWordField) {
+    [self.touchedTile endTouch];
+    if ([self touchedTileIsInWordField] && self.wordArray.count <= 28) {
+      
+      self.recentTile = self.touchedTile;
+      
+      [self addToWordArrayTile:self.recentTile];
+      [self sendTileToWordField:self.recentTile];
       
     } else {
-      [self.touchedTile endTouch];
-      [UIView animateWithDuration:kAnimationTime animations:^{
-        self.touchedTile.center = self.touchedTile.homeCenter;
-      }];
+      if (self.wordArray.count > 28) {
+        [self removeFromWordArrayTile:self.touchedTile];
+      }
+      [self sendTileHome:self.touchedTile];
     }
     self.touchedTile = nil;
   }
@@ -144,46 +153,157 @@
   [self touchesEnded:touches withEvent:event];
 }
 
-#pragma mark - text field delegate methods
-
--(void)textFieldDidEndEditing:(UITextField *)textField {
-  NSLog(@"textField text is '%@'", textField.text);
-  NSString *suggestedWord = [self.logicEngine suggestCorrectWordForUserWord:textField.text];
-  [self showWordInPicker:suggestedWord];
+-(BOOL)touchedTileIsInWordField {
+  return (self.touchedTile.center.y > 0 && self.touchedTile.center.y < kWordFieldHeight);
 }
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField {
-  [self.inputField resignFirstResponder];
-  return YES;
+#pragma mark - word array methods
+
+-(void)removeFromWordArrayTile:(LetterTile *)tile {
+  if ([self.wordArray containsObject:tile]) {
+    [self.wordArray removeObject:tile];
+    [self repositionWordArrayTiles];
+  }
 }
 
-#pragma mark - picker methods
-
--(void)showWordInPicker:(NSString *)suggestedWord {
-
-  [self.wordListPicker selectRow:(suggestedWord ? [self.logicEngine.wordListArray indexOfObject:suggestedWord] : self.logicEngine.wordListArray.count) inComponent:0 animated:YES];
+-(void)addToWordArrayTile:(LetterTile *)tile {
+    
+    // add to front
+  if (tile.center.x < (self.view.bounds.size.width / 2)) {
+    
+      // if last object, first remove
+    if (tile == [self.wordArray lastObject]) {
+      [self.wordArray removeObject:tile];
+    }
+    
+    if (![self.wordArray containsObject:tile]) {
+      [self.wordArray insertObject:tile atIndex:0];
+    }
+    
+      // add to back
+  } else {
+    
+      // if first object, first remove
+    if (tile == [self.wordArray firstObject]) {
+      [self.wordArray removeObject:tile];
+    }
+    
+    if (![self.wordArray containsObject:tile]) {
+      [self.wordArray addObject:tile];
+    }
+  }
+  [self repositionWordArrayTiles];
 }
 
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-  return self.logicEngine.wordListArray.count + 1;
+-(NSString *)wordFromWordArray {
+  NSString *string = @"";
+  for (int i = 0; i < self.wordArray.count; i++) {
+    LetterTile *tile = self.wordArray[i];
+    string = [string stringByAppendingString:tile.text];
+  }
+  return string;
 }
 
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-  return 1;
+#pragma mark - tile movement and placement methods
+
+-(void)addNewLetterTileForChar:(unichar)myChar {
+  int i = myChar - 'a';
+  LetterTile *tile = [[LetterTile alloc] initWithChar:myChar];
+  tile.homeCenter = CGPointMake((self.view.bounds.size.width - (kTileWidth * 1.1 * 7)) / 2 + ((i % 7) + (i < 21 ? 0.5 : 1.5)) * (kTileWidth * 1.1), ((i / 7) + 0.5) * (kTileHeight * 1.1) + kWordFieldHeight);
+  tile.center = tile.homeCenter;
+  [self.tileField addSubview:tile];
 }
 
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-  return (row == self.logicEngine.wordListArray.count) ? @"(no suggestion)" : self.logicEngine.wordListArray[row];
+-(void)sendTileToWordField:(LetterTile *)tile {
+  
+  if (tile == self.touchedTile) {
+    self.touchedTile = nil;
+  }
+  
+//     should be positioned naturally by repositionMethod
+  [UIView animateWithDuration:kAnimationTime animations:^{
+    tile.center = tile.wordFieldCenter;
+  }];
 }
 
--(CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
-  return 32.f;
+-(void)sendTileHome:(LetterTile *)tile {
+  [tile resetFrameAndFont];
+  
+  if (tile == self.recentTile) {
+    [self removeFromWordArrayTile:self.recentTile];
+    self.recentTile = nil;
+  }
+  
+  if (tile == self.touchedTile) {
+    self.touchedTile = nil;
+  }
+  
+  [UIView animateWithDuration:kAnimationTime animations:^{
+    tile.center = tile.homeCenter;
+  }];
 }
 
-#pragma mark - word logic delegate methods
+-(void)repositionWordArrayTiles {
+    // gets called whenever wordArray is changed
 
--(void)populatePicker {
-  [self.wordListPicker reloadAllComponents];
+  if (self.wordArray.count > 0) {
+    
+    BOOL needsToShrink = kTileWidth * 1.1 * self.wordArray.count + (self.recentTile ? 1 : 2) > self.view.bounds.size.width - kTileWidth * 1.1;
+    
+    for (int i = 0; i < self.wordArray.count; i++) {
+      LetterTile *tile = self.wordArray[i];
+
+      if (needsToShrink) {
+        CGFloat tileWidth = ((self.view.bounds.size.width - kTileWidth) / self.wordArray.count);
+        if (tile != self.touchedTile && tile != self.recentTile) {
+          CGRect newFrame = tile.frame;
+          newFrame.size.width = tileWidth * 1.1;
+          tile.frame = newFrame;
+          tile.font = [UIFont fontWithName:kFontModern size:(tileWidth + kTileWidth) / 2];
+        }
+        tile.wordFieldCenter = CGPointMake(((i + 0.5) * tileWidth) + kTileWidth / 2, kWordFieldHeight / 2);
+        
+      } else {
+        if (tile != self.touchedTile && tile != self.recentTile) {
+          CGRect newFrame = tile.frame;
+          newFrame.size.width = kTileWidth;
+          tile.frame = newFrame;
+          tile.font = [UIFont fontWithName:kFontModern size:kTileWidth];
+        }
+        tile.wordFieldCenter = CGPointMake(((self.view.bounds.size.width - kTileWidth * 1.1) - (kTileWidth * 1.1 * self.wordArray.count)) / 2 + ((i + 1) * kTileWidth * 1.1), kWordFieldHeight / 2);
+      }
+      
+      if (tile != self.touchedTile) {
+        [self sendTileToWordField:tile];
+      }
+    }
+  }
+}
+
+-(void)handleWordReverse {
+  NSUInteger frontIndex = 0;
+  NSUInteger backIndex = self.wordArray.count - 1;
+  while (frontIndex < backIndex) {
+    [self.wordArray exchangeObjectAtIndex:frontIndex withObjectAtIndex:backIndex];
+    frontIndex++;
+    backIndex--;
+  }
+  [self repositionWordArrayTiles];
+}
+
+#pragma mark - turn methods
+
+-(void)handleTurnDone {
+  
+  [self.recentTile finalise];
+  [self addNewLetterTileForChar:self.recentTile.myChar];
+  
+  if (self.recentTile) {
+    self.recentTile.userInteractionEnabled = NO;
+    self.recentTile = nil;
+  }
+  
+  [self repositionWordArrayTiles];
 }
 
 #pragma mark - button methods
@@ -196,12 +316,21 @@
   } else if (sender == self.challengeButton) {
     
   } else if (sender == self.reverseButton) {
-    
+    [self handleWordReverse];
   } else if (sender == self.resignButton) {
   
   } else if (sender == self.doneButton) {
+    [self handleTurnDone];
     
+  } else if (sender == self.testButton) {
+    [self testButtonPressed];
   }
+}
+
+-(void)testButtonPressed {
+
+  NSLog(@"word array count is %lu", (unsigned long)self.wordArray.count);
+  NSLog(@"string is %@", [self wordFromWordArray]);
 }
 
 @end

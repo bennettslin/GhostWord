@@ -20,19 +20,13 @@
 - (instancetype)initWithChar:(unichar)myChar {
   self = [super init];
     if (self) {
-      self.frame = CGRectMake(0, 0, kTileWidth, kTileHeight);
-      
-      int i = myChar - 'a'; // i is 0 to 25
-      self.homeCenter = CGPointMake(((i % 7) + (i < 21 ? 0.5 : 1.5)) * (kTileWidth * 1.1),
-                                    ((i / 7) + 0.5) * (kTileHeight * 1.1));
-      self.center = self.homeCenter;
-      
+
+      [self resetFrameAndFont];
       self.myChar = myChar;
       unichar chars[1] = {myChar};
       self.text = [NSString stringWithCharacters:chars length:1];
       self.textAlignment = NSTextAlignmentCenter;
       self.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-      self.font = [UIFont fontWithName:kFontModern size:self.frame.size.height * 0.8];
       
       self.backgroundColor = kTileNormalColour;
       self.layer.cornerRadius = kTileWidth / 4;
@@ -61,6 +55,20 @@
   return self.isTouched;
 }
 
+-(void)finalise {
+  self.backgroundColor = [UIColor redColor];
+}
 
+-(void)definalise {
+  self.backgroundColor = kTileNormalColour;
+}
+
+-(void)resetFrameAndFont {
+  CGRect newFrame = self.frame;
+  newFrame.size.width = kTileWidth;
+  newFrame.size.height = kTileHeight;
+  self.frame = newFrame;
+  self.font = [UIFont fontWithName:kFontModern size:kTileWidth];
+}
 
 @end

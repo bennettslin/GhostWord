@@ -29,6 +29,4 @@ typedef enum wordStatus {
 
 @protocol LogicDelegate <NSObject>
 
--(void)populatePicker;
-
 @end

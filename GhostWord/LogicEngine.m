@@ -50,7 +50,6 @@
   NSString *wordListString = [NSString stringWithContentsOfFile:wordListPath encoding:NSUTF8StringEncoding error:&error];
   if (!error) {
     [self generateWordListArray:wordListString];
-    [self.delegate populatePicker];
   } else {
     NSLog(@"Error: %@", error.localizedDescription);
   }

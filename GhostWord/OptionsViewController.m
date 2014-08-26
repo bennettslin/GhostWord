@@ -132,7 +132,7 @@ typedef enum gameRules {
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
-  [self.delegate disableOverlay];
+  [self.delegate enableOverlay:NO];
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
@@ -155,7 +155,7 @@ typedef enum gameRules {
     [textField resignFirstResponder];
     NSUInteger index = [self.playerNameFields indexOfObject:textField];
     [self saveNameForPlayerIndex:index];
-    [self.delegate enableOverlay];
+    [self.delegate enableOverlay:YES];
   }
 }
 

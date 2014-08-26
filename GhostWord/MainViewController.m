@@ -183,12 +183,8 @@
   }
 }
 
--(void)enableOverlay {
-  self.overlayEnabled = YES;
-}
-
--(void)disableOverlay {
-  self.overlayEnabled = NO;
+-(void)enableOverlay:(BOOL)enable {
+  self.overlayEnabled = enable;
 }
 
 -(void)didReceiveMemoryWarning {

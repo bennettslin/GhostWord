@@ -28,14 +28,14 @@
 //  return nil;
 //}
 //
-//-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-//  UIView *hit =  [super hitTest:point withEvent:event];
-//  
-//  if (hit == self) {
-//    return nil;
-//  }
-//  
-//  return hit;
-//}
+-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+  UIView *hit =  [super hitTest:point withEvent:event];
+  
+  if (hit == self) {
+    return nil;
+  }
+  
+  return hit;
+}
 
 @end

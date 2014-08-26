@@ -12,11 +12,17 @@
 
 @property (nonatomic) unichar myChar;
 @property (nonatomic) CGPoint homeCenter;
+@property (nonatomic) CGPoint wordFieldCenter;
 
 -(id)initWithChar:(unichar)myChar;
 
 -(void)beginTouch;
 -(void)endTouch;
 -(BOOL)isTouched;
+
+-(void)finalise;
+-(void)definalise;
+
+-(void)resetFrameAndFont;
 
 @end
