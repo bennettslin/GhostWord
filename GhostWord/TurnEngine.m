@@ -44,34 +44,30 @@
   [self.delegate updateMessageLabel];
 }
 
--(void)handleCompletionOfTurnWithChallenge:(BOOL)challenge {
+-(void)handleCompletionOfTurn {
   self.currentPlayer = (self.currentPlayer + 1) % 2;
   self.currentTurn++;
-  self.challengeMode = challenge;
+  self.currentWord = [self.delegate wordFromWordArray];
   
   [self saveTurnData];
   [self.delegate updateMessageLabel];
+  [self.delegate updateButtons];
 }
 
 -(void)saveTurnData {
   [self.defaults setInteger:self.currentPlayer forKey:@"player"];
   [self.defaults setInteger:self.currentTurn forKey:@"turn"];
-  
-  NSString *word = [self.delegate wordFromWordArrayCountingRecentTile:NO];
-  if (word.length > 0) {
-    [self.defaults setObject:word forKey:@"word"];
+
+  if (self.currentWord.length > 0) {
+    [self.defaults setObject:self.currentWord forKey:@"word"];
   }
   
   [self.defaults setBool:self.challengeMode forKey:@"challenge"];
 }
 
 -(void)handleEndOfGame {
-
-  [self resetGameValues];
+  self.currentWord = nil;
   [self.defaults removeObjectForKey:@"word"];
-//  [NSUserDefaults resetStandardUserDefaults];
-  
-  [self.delegate showWonGame];
 }
 
 -(void)resetGameValues {

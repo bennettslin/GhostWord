@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3F7BD88919AAF61200AF8032 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BD88819AAF61200AF8032 /* OptionsViewController.m */; };
+		3F7BD88919AAF61200AF8032 /* StartNewGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BD88819AAF61200AF8032 /* StartNewGameViewController.m */; };
 		3F7BD88C19AAF62100AF8032 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BD88B19AAF62100AF8032 /* HelpViewController.m */; };
 		3F7BD88F19AAF93800AF8032 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F7BD88E19AAF93800AF8032 /* MainViewController.m */; };
 		3F7BD89119AB07DA00AF8032 /* Filmotype-Modern.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3F7BD89019AB075100AF8032 /* Filmotype-Modern.otf */; };
@@ -26,6 +26,7 @@
 		3FBA92A519ABE74800320CA0 /* Field.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA92A419ABE74800320CA0 /* Field.m */; };
 		3FBA92A819ABE75E00320CA0 /* TileField.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA92A719ABE75E00320CA0 /* TileField.m */; };
 		3FBA92AB19ABE7A700320CA0 /* WordField.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA92AA19ABE7A700320CA0 /* WordField.m */; };
+		3FBA92AF19AD62FC00320CA0 /* WonGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA92AE19AD62FC00320CA0 /* WonGameViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3F7BD88719AAF61200AF8032 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
-		3F7BD88819AAF61200AF8032 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
+		3F7BD88719AAF61200AF8032 /* StartNewGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartNewGameViewController.h; sourceTree = "<group>"; };
+		3F7BD88819AAF61200AF8032 /* StartNewGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartNewGameViewController.m; sourceTree = "<group>"; };
 		3F7BD88A19AAF62100AF8032 /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
 		3F7BD88B19AAF62100AF8032 /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
 		3F7BD88D19AAF93800AF8032 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -76,6 +77,8 @@
 		3FBA92A919ABE7A700320CA0 /* WordField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordField.h; sourceTree = "<group>"; };
 		3FBA92AA19ABE7A700320CA0 /* WordField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordField.m; sourceTree = "<group>"; };
 		3FBA92AC19ABEC3000320CA0 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		3FBA92AD19AD62FC00320CA0 /* WonGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WonGameViewController.h; sourceTree = "<group>"; };
+		3FBA92AE19AD62FC00320CA0 /* WonGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WonGameViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,10 +128,12 @@
 				3F7BD88E19AAF93800AF8032 /* MainViewController.m */,
 				3F92827C19AA85E6000D3791 /* MatchViewController.h */,
 				3F92829F19AA9727000D3791 /* MatchViewController.m */,
-				3F7BD88719AAF61200AF8032 /* OptionsViewController.h */,
-				3F7BD88819AAF61200AF8032 /* OptionsViewController.m */,
+				3F7BD88719AAF61200AF8032 /* StartNewGameViewController.h */,
+				3F7BD88819AAF61200AF8032 /* StartNewGameViewController.m */,
 				3F7BD88A19AAF62100AF8032 /* HelpViewController.h */,
 				3F7BD88B19AAF62100AF8032 /* HelpViewController.m */,
+				3FBA92AD19AD62FC00320CA0 /* WonGameViewController.h */,
+				3FBA92AE19AD62FC00320CA0 /* WonGameViewController.m */,
 				3F9282A419AAC922000D3791 /* Logic */,
 				3FBA929919ABE28500320CA0 /* Views */,
 				3F92827519AA85E6000D3791 /* Supporting Files */,
@@ -303,13 +308,14 @@
 				3F9282A319AAB546000D3791 /* LogicEngine.m in Sources */,
 				3F7BD88F19AAF93800AF8032 /* MainViewController.m in Sources */,
 				3FBA92A519ABE74800320CA0 /* Field.m in Sources */,
+				3FBA92AF19AD62FC00320CA0 /* WonGameViewController.m in Sources */,
 				3F7BD88C19AAF62100AF8032 /* HelpViewController.m in Sources */,
 				3F92827819AA85E6000D3791 /* main.m in Sources */,
 				3FBA92A819ABE75E00320CA0 /* TileField.m in Sources */,
 				3FBA92AB19ABE7A700320CA0 /* WordField.m in Sources */,
 				3FBA92A219ABE62700320CA0 /* TurnEngine.m in Sources */,
 				3FBA929C19ABE2A900320CA0 /* LetterTile.m in Sources */,
-				3F7BD88919AAF61200AF8032 /* OptionsViewController.m in Sources */,
+				3F7BD88919AAF61200AF8032 /* StartNewGameViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,10 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.11" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2jh-A3-4DA">
     <dependencies>
-        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
     </dependencies>
     <scenes>
+        <!--Won Game View Controller-->
+        <scene sceneID="0YN-L7-EVy">
+            <objects>
+                <viewController storyboardIdentifier="wonGameVC" id="ykO-Ui-A71" customClass="WonGameViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cog-o1-bbP"/>
+                        <viewControllerLayoutGuide type="bottom" id="ZEx-q6-z0O"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="537-rq-HjM">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="320" translatesAutoresizingMaskIntoConstraints="NO" id="e17-MK-oRB">
+                                <rect key="frame" x="20" y="20" width="320" height="160"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="wonMessageLabel" destination="e17-MK-oRB" id="m7C-U6-glo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HA2-Sw-ZSp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1479" y="130"/>
+        </scene>
         <!--Match View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -18,7 +46,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rCh-t1-UH7">
-                                <rect key="frame" x="20" y="20" width="160" height="41"/>
+                                <rect key="frame" x="399" y="54" width="160" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Main Menu">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -54,7 +82,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="buttonPressed:" destination="2jh-A3-4DA" eventType="touchUpInside" id="JtO-tI-NIr"/>
                                     <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ugk-0h-4xr"/>
                                 </connections>
                             </button>
@@ -79,7 +106,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Message Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8xO-4q-WsB">
-                                <rect key="frame" x="20" y="167" width="117" height="21"/>
+                                <rect key="frame" x="20" y="167" width="560" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -94,6 +121,16 @@
                                     <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="RQJ-U4-zsG"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nE-UA-hfI">
+                                <rect key="frame" x="20" y="20" width="160" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Undo">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cub-W7-2CV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -106,16 +143,17 @@
                         <outlet property="resignButton" destination="9Rm-TA-oln" id="sHH-H9-m9Z"/>
                         <outlet property="reverseButton" destination="hSH-V7-JeN" id="oxm-H0-4dD"/>
                         <outlet property="testButton" destination="U4L-fV-myZ" id="9uf-Ys-RxC"/>
+                        <outlet property="undoButton" destination="7nE-UA-hfI" id="wB5-1u-6gY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="809" y="130"/>
         </scene>
-        <!--Options View Controller-->
+        <!--Start New Game View Controller-->
         <scene sceneID="uAp-Yq-drc">
             <objects>
-                <viewController storyboardIdentifier="optionsVC" id="rAV-2L-jog" customClass="OptionsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="optionsVC" id="rAV-2L-jog" customClass="StartNewGameViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cik-XM-x9H"/>
                         <viewControllerLayoutGuide type="bottom" id="iGc-kp-1N9"/>
@@ -162,7 +200,7 @@
                                 </connections>
                             </segmentedControl>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Game rules description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3J3-xH-DTo">
-                                <rect key="frame" x="20" y="296" width="222" height="30"/>
+                                <rect key="frame" x="20" y="296" width="222" height="70"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -180,7 +218,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gmd-mV-5Ys">
-                                <rect key="frame" x="20" y="334" width="240" height="41"/>
+                                <rect key="frame" x="20" y="374" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Start new game">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -250,7 +288,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lLi-a2-2xj">
                                 <rect key="frame" x="20" y="163" width="240" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Options">
+                                <state key="normal" title="Start new game">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -275,13 +313,16 @@
                                 <state key="normal" title="Help">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="buttonPressed:" destination="2jh-A3-4DA" eventType="touchUpInside" id="VpT-75-1Oi"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
                         <outlet property="helpButton" destination="TSa-af-3ag" id="DvF-Z4-ZIC"/>
-                        <outlet property="optionsButton" destination="lLi-a2-2xj" id="z3f-zT-kh8"/>
+                        <outlet property="startNewGameButton" destination="lLi-a2-2xj" id="Ukz-Oo-CiP"/>
                         <outlet property="titleLogo" destination="AUQ-ER-ERq" id="4Bw-sr-dkU"/>
                     </connections>
                 </viewController>

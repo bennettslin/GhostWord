@@ -70,6 +70,7 @@
   newFrame.size.height = kTileHeight;
   self.frame = newFrame;
   self.font = [UIFont fontWithName:kFontModern size:kTileWidth];
+  self.layer.cornerRadius = kTileWidth / 4;
 }
 
 @end

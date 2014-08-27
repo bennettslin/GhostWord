@@ -29,4 +29,15 @@
 #define kPlayer1Key @"player1Name"
 #define kPlayer2Key @"player2Name"
 
+typedef enum gameRules {
+  kRulesGhost,
+  kRulesSuper,
+  kRulesDuper
+} GameRules;
+
+typedef enum player {
+  kPlayer1,
+  kPlayer2
+} Player;
+
 #endif

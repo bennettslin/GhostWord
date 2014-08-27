@@ -7,18 +7,21 @@
 //
 
 #import "MainViewController.h"
-#import "OptionsViewController.h"
+#import "StartNewGameViewController.h"
 #import "HelpViewController.h"
+#import "WonGameViewController.h"
 #import "MatchViewController.h"
 #import "Constants.h"
 
-@interface MainViewController () <MatchDelegate, OptionsDelegate>
+@interface MainViewController () <MatchDelegate, StartNewGameDelegate>
 
-@property (weak, nonatomic) IBOutlet UIButton *optionsButton;
+@property (weak, nonatomic) IBOutlet UIButton *startNewGameButton;
 @property (weak, nonatomic) IBOutlet UIButton *helpButton;
 
-@property (strong, nonatomic) OptionsViewController *optionsVC;
+@property (strong, nonatomic) StartNewGameViewController *startNewGameVC;
 @property (strong, nonatomic) HelpViewController *helpVC;
+@property (strong, nonatomic) WonGameViewController *wonGameVC;
+
 @property (strong, nonatomic) MatchViewController *matchVC;
 @property (strong, nonatomic) UIViewController *childVC;
 
@@ -44,9 +47,12 @@
   self.helpVC = [self.storyboard instantiateViewControllerWithIdentifier:@"helpVC"];
   self.helpVC.view.backgroundColor = [UIColor purpleColor];
   
-  self.optionsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"optionsVC"];
-  self.optionsVC.view.backgroundColor = [UIColor blueColor];
-  self.optionsVC.delegate = self;
+  self.wonGameVC = [self.storyboard instantiateViewControllerWithIdentifier:@"wonGameVC"];
+  self.wonGameVC.view.backgroundColor = [UIColor orangeColor];
+  
+  self.startNewGameVC = [self.storyboard instantiateViewControllerWithIdentifier:@"optionsVC"];
+  self.startNewGameVC.view.backgroundColor = [UIColor blueColor];
+  self.startNewGameVC.delegate = self;
   
   self.darkOverlay = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
   [self.darkOverlay addTarget:self action:@selector(fromDarkOverlayBackToMain) forControlEvents:UIControlEventTouchDown];
@@ -77,8 +83,8 @@
   if (self.overlayEnabled) {
     [self removeChildVCWithoutAnimation];
 
-  } else if (self.childVC == self.optionsVC) {
-    [self.optionsVC resignTextField:nil];
+  } else if (self.childVC == self.startNewGameVC) {
+    [self.startNewGameVC resignTextField:nil];
   }
 }
 
@@ -153,8 +159,8 @@
 -(IBAction)buttonPressed:(id)sender {
   
   UIViewController *presentedVC;
-  if (sender == self.optionsButton) {
-    presentedVC = self.optionsVC;
+  if (sender == self.startNewGameButton) {
+    presentedVC = self.startNewGameVC;
   } else if (sender == self.helpButton) {
     presentedVC = self.helpVC;
   }
@@ -166,6 +172,12 @@
 
 -(void)helpButtonPressed {
   [self presentChildViewController:self.helpVC];
+}
+
+-(void)showWonGameVCWithString:(NSString *)string {
+  self.wonGameVC.wonMessageLabel.text = string;
+  [self presentChildViewController:self.wonGameVC];
+  [self backToMainMenu];
 }
 
 -(void)backToMainMenu {
@@ -201,6 +213,12 @@
 
 -(void)enableOverlay:(BOOL)enable {
   self.overlayEnabled = enable;
+}
+
+#pragma mark - system methods
+
+-(BOOL)prefersStatusBarHidden {
+  return YES;
 }
 
 @end

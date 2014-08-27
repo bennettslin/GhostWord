@@ -7,11 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-typedef enum player {
-  kPlayer1,
-  kPlayer2
-} Player;
+#import "Constants.h"
 
 @protocol TurnEngineDelegate;
 
@@ -25,7 +21,7 @@ typedef enum player {
 @property (weak, nonatomic) id<TurnEngineDelegate> delegate;
 
 -(void)handleWhetherToStartOrContinueGame;
--(void)handleCompletionOfTurnWithChallenge:(BOOL)challenge;
+-(void)handleCompletionOfTurn;
 -(void)handleEndOfGame;
 -(void)saveTurnData;
 
@@ -36,9 +32,10 @@ typedef enum player {
 -(void)setupNewKeyboard;
 -(void)setupWordFieldForSavedGame;
 
--(NSString *)wordFromWordArrayCountingRecentTile:(BOOL)countRecentTile;
+-(NSString *)wordFromWordArray;
 
+-(void)updateButtons;
 -(void)updateMessageLabel;
--(void)showWonGame;
+-(void)handleWonGame;
 
 @end

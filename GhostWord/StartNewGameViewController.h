@@ -8,17 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol OptionsDelegate;
+@protocol StartNewGameDelegate;
 
-@interface OptionsViewController : UIViewController
+@interface StartNewGameViewController : UIViewController
 
-@property (weak, nonatomic) id<OptionsDelegate> delegate;
+@property (weak, nonatomic) id<StartNewGameDelegate> delegate;
 
 -(void)resignTextField:(UITextField *)textField;
 
 @end
 
-@protocol OptionsDelegate <NSObject>
+@protocol StartNewGameDelegate <NSObject>
 
 -(void)enableOverlay:(BOOL)enable;
 -(void)presentMatchViewController;

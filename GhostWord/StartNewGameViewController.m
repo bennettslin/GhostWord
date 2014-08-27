@@ -6,16 +6,10 @@
 //  Copyright (c) 2014 Bennett Lin. All rights reserved.
 //
 
-#import "OptionsViewController.h"
+#import "StartNewGameViewController.h"
 #import "Constants.h"
 
-typedef enum gameRules {
-  kRulesGhost,
-  kRulesSuper,
-  kRulesDuper
-} GameRules;
-
-@interface OptionsViewController () <UITextFieldDelegate>
+@interface StartNewGameViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *player1NameField;
 @property (weak, nonatomic) IBOutlet UITextField *player2NameField;
@@ -37,7 +31,7 @@ typedef enum gameRules {
 
 @end
 
-@implementation OptionsViewController
+@implementation StartNewGameViewController
 
 -(void)viewDidLoad {
   [super viewDidLoad];
@@ -88,6 +82,7 @@ typedef enum gameRules {
       textField.text = [self.defaults objectForKey:playerKey];
     }
   }
+  [self updateText];
 }
 
 -(IBAction)segmentedControlValueChanged:(UISegmentedControl *)sender {
@@ -98,6 +93,7 @@ typedef enum gameRules {
     [self.defaults setInteger:sender.selectedSegmentIndex forKey:@"rules"];
   }
   [self.defaults synchronize];
+  [self updateText];
 }
 
 #pragma mark - state change methods
@@ -174,6 +170,35 @@ typedef enum gameRules {
 -(void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
   // Dispose of any resources that can be recreated.
+}
+
+-(void)updateText {
+  
+  switch (self.minimumLettersControl.selectedSegmentIndex) {
+    case 0:
+      self.minimumLettersLabel.text = @"Words three letters and up lose the game.";
+      break;
+    case 1:
+      self.minimumLettersLabel.text = @"Words four letters and up lose the game.";
+      break;
+  }
+  
+  switch (self.rulesControl.selectedSegmentIndex) {
+    case 0:
+      self.rulesLabel.numberOfLines = 1;
+      self.rulesLabel.text = @"New letter is placed at end.";
+      break;
+    case 1:
+      self.rulesLabel.numberOfLines = 1;
+      self.rulesLabel.text = @"New letter can be placed at beginning or end.";
+      break;
+    case 2:
+      self.rulesLabel.numberOfLines = 2;
+      self.rulesLabel.text = @"New letter can be placed at beginning or end.\nOrder of all letters can be reversed.";
+      break;
+    default:
+      break;
+  }
 }
 
 

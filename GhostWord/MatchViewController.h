@@ -20,7 +20,8 @@
 
 @protocol MatchDelegate <NSObject>
 
--(void)backToMainMenu;
+-(void)backToMainMenu; // for test purposes only
 -(void)helpButtonPressed;
+-(void)showWonGameVCWithString:(NSString *)string;
 
 @end

@@ -15,7 +15,15 @@
 #import "LetterTile.h"
 #import "TurnEngine.h"
 
-@interface MatchViewController () <LogicDelegate, TurnEngineDelegate>
+typedef enum gameEndedReason {
+  kGameNotEnded,
+  kGameEndedResign,
+  kGameChallengedPlayerWon,
+  kGameChallengedPlayerLost,
+  kGameChallengedWordIsAlreadyWord
+} GameEndedReason;
+
+@interface MatchViewController () <LogicDelegate, TurnEngineDelegate, UIActionSheetDelegate>
 
 @property (strong, nonatomic) TurnEngine *turnEngine;
 @property (strong, nonatomic) LogicEngine *logicEngine;
@@ -23,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *mainMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *helpButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *undoButton;
 @property (weak, nonatomic) IBOutlet UIButton *reverseButton;
 @property (weak, nonatomic) IBOutlet UIButton *challengeButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
@@ -43,7 +52,7 @@
 @property (strong, nonatomic) NSUserDefaults *defaults;
 
   // bools
-@property (nonatomic) BOOL challengeMode;
+@property (nonatomic) GameEndedReason gameEndedReason;
 
 @end
 
@@ -97,6 +106,9 @@
 -(void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   [self.turnEngine handleWhetherToStartOrContinueGame];
+  self.gameEndedReason = kGameNotEnded;
+  
+  [self updateButtons];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -203,12 +215,15 @@
     [self.wordArray removeObject:tile];
     [self repositionWordArrayTiles];
   }
+  
+  [self updateButtons];
 }
 
 -(void)addToWordArrayTile:(LetterTile *)tile {
     
     // add to front
-  if (tile.center.x < (self.view.bounds.size.width / 2)) {
+  if (tile.center.x < (self.view.bounds.size.width / 2) &&
+      [self.defaults integerForKey:@"rules"] != kRulesGhost) {
     
       // if last object, first remove
     if (tile == [self.wordArray lastObject]) {
@@ -231,11 +246,12 @@
       [self.wordArray addObject:tile];
     }
   }
+  
   [self repositionWordArrayTiles];
+  [self updateButtons];
 }
 
-  // countRecentTile bool not necessary after testing
--(NSString *)wordFromWordArrayCountingRecentTile:(BOOL)countRecentTile {
+-(NSString *)wordFromWordArray {
   NSString *string = @"";
   for (int i = 0; i < self.wordArray.count; i++) {
     LetterTile *tile = self.wordArray[i];
@@ -252,8 +268,13 @@
   int i = myChar - 'a';
   LetterTile *tile = [[LetterTile alloc] initWithChar:myChar];
   tile.homeCenter = CGPointMake((self.view.bounds.size.width - (kTileWidth * 1.1 * 7)) / 2 + ((i % 7) + (i < 21 ? 0.5 : 1.5)) * (kTileWidth * 1.1), ((i / 7) + 0.5) * (kTileHeight * 1.1) + kWordFieldHeight);
+  CGRect bounds = tile.bounds;
+  tile.bounds = CGRectZero;
   tile.center = tile.homeCenter;
   [self.tileField addSubview:tile];
+  [UIView animateWithDuration:kAnimationTime animations:^{
+    tile.bounds = bounds;
+  }];
   return tile;
 }
 
@@ -267,6 +288,13 @@
   [UIView animateWithDuration:kAnimationTime animations:^{
     tile.center = tile.wordFieldCenter;
   }];
+  
+  if (tile == self.recentTile && self.turnEngine.challengeMode) {
+    [self.recentTile finalise];
+    [self addNewLetterTileForChar:self.recentTile.myChar];
+    self.recentTile = nil;
+    [self repositionWordArrayTiles];
+  }
 }
 
 -(void)sendTileHome:(LetterTile *)tile {
@@ -279,6 +307,7 @@
   
   if (tile == self.touchedTile) {
     self.touchedTile = nil;
+    [self updateButtons];
   }
   
   [UIView animateWithDuration:kAnimationTime animations:^{
@@ -303,8 +332,17 @@
           newFrame.size.width = tileWidth * 1.1;
           tile.frame = newFrame;
           tile.font = [UIFont fontWithName:kFontModern size:(tileWidth + kTileWidth) / 2];
+          tile.layer.cornerRadius = tileWidth / 4;
+          tile.wordFieldCenter = CGPointMake(((i + 0.5) * tileWidth) + kTileWidth / 2, kWordFieldHeight / 2);
+          
+            // tile is recentTile
+        } else {
+          if (tile == [self.wordArray firstObject]) {
+          tile.wordFieldCenter = CGPointMake(((i + 0.5) * tileWidth) + kTileWidth / 2 - (kTileWidth - tileWidth) / 2, kWordFieldHeight / 2);
+          } else if (tile == [self.wordArray lastObject]) {
+          tile.wordFieldCenter = CGPointMake(((i + 0.5) * tileWidth) + kTileWidth / 2 + (kTileWidth - tileWidth) / 2, kWordFieldHeight / 2);
+          }
         }
-        tile.wordFieldCenter = CGPointMake(((i + 0.5) * tileWidth) + kTileWidth / 2, kWordFieldHeight / 2);
         
       } else {
         if (tile != self.touchedTile && tile != self.recentTile) {
@@ -312,11 +350,12 @@
           newFrame.size.width = kTileWidth;
           tile.frame = newFrame;
           tile.font = [UIFont fontWithName:kFontModern size:kTileWidth];
+          tile.layer.cornerRadius = kTileWidth / 4;
         }
         tile.wordFieldCenter = CGPointMake(((self.view.bounds.size.width - kTileWidth * 1.1) - (kTileWidth * 1.1 * self.wordArray.count)) / 2 + ((i + 1) * kTileWidth * 1.1), kWordFieldHeight / 2);
       }
       
-      if (tile != self.touchedTile) {
+      if (tile != self.touchedTile && !CGPointEqualToPoint(tile.center, tile.wordFieldCenter)) {
         [self sendTileToWordField:tile];
       }
     }
@@ -336,7 +375,24 @@
   }
 }
 
+-(void)handleUndo {
+  for (LetterTile *tile in self.wordArray) {
+    [tile removeFromSuperview];
+  }
+  
+  [self setupWordFieldForSavedGame];
+}
+
 #pragma mark - turn methods
+
+-(void)handleWordAlreadyCompleteChallenge {
+  if ([self.logicEngine suggestCorrectWordForUserWord:[self wordFromWordArray]]) {
+    self.gameEndedReason = kGameChallengedWordIsAlreadyWord;
+    [self handleWonGame];
+  } else {
+    [self.turnEngine handleCompletionOfTurn];
+  }
+}
 
 -(void)handleTurnDone {
   
@@ -346,8 +402,26 @@
     self.recentTile = nil;
   }
   
-  [self.turnEngine handleCompletionOfTurnWithChallenge:self.challengeMode];
+  [self.turnEngine handleCompletionOfTurn];
   [self repositionWordArrayTiles];
+}
+
+-(void)handleChallengeTurnDone {
+  
+    // might not be necessary in challenge mode
+  [self.recentTile finalise];
+  [self addNewLetterTileForChar:self.recentTile.myChar];
+  if (self.recentTile) {
+    self.recentTile = nil;
+  }
+  
+  if ([self.logicEngine suggestCorrectWordForUserWord:[self wordFromWordArray]]) {
+    self.gameEndedReason = kGameChallengedPlayerWon;
+  } else {
+    self.gameEndedReason = kGameChallengedPlayerLost;
+  }
+  
+  [self handleWonGame];
 }
 
 -(void)updateMessageLabel {
@@ -358,8 +432,37 @@
   [NSString stringWithFormat:@"%@, you've been challenged!", playerName];
 }
 
--(void)showWonGame {
-  [self.delegate backToMainMenu];
+-(void)handleWonGame {
+  [self.turnEngine handleEndOfGame];
+  
+  NSString *playerName;
+  NSString *messageString = @"";
+  switch (self.gameEndedReason) {
+    case kGameEndedResign:
+      playerName = (self.turnEngine.currentPlayer == kPlayer1) ?
+      [self.defaults objectForKey:kPlayer2Key] : [self.defaults objectForKey:kPlayer1Key];
+      messageString = [NSString stringWithFormat:@"%@ won!", playerName];
+      break;
+    case kGameChallengedPlayerWon:
+      playerName = (self.turnEngine.currentPlayer == kPlayer1) ?
+      [self.defaults objectForKey:kPlayer1Key] : [self.defaults objectForKey:kPlayer2Key];
+      messageString = [NSString stringWithFormat:@"%@ won!\n'%@' is a word.", playerName, [self wordFromWordArray]];
+      break;
+    case kGameChallengedPlayerLost:
+      playerName = (self.turnEngine.currentPlayer == kPlayer1) ?
+      [self.defaults objectForKey:kPlayer2Key] : [self.defaults objectForKey:kPlayer1Key];
+      messageString = [NSString stringWithFormat:@"%@ won!\n'%@' is not a word.", playerName, [self wordFromWordArray]];
+      break;
+    case kGameChallengedWordIsAlreadyWord:
+      playerName = (self.turnEngine.currentPlayer == kPlayer1) ?
+      [self.defaults objectForKey:kPlayer1Key] : [self.defaults objectForKey:kPlayer2Key];
+      messageString = [NSString stringWithFormat:@"%@ won!\n'%@' is a word.", playerName, [self wordFromWordArray]];
+      break;
+    default:
+      break;
+  }
+  
+  [self.delegate showWonGameVCWithString:messageString];
 }
 
 #pragma mark - button methods
@@ -373,16 +476,20 @@
     [self.delegate helpButtonPressed];
   } else if (sender == self.challengeButton) {
     if (!self.recentTile) {
-      
-        // enter code
-      
+      self.turnEngine.challengeMode = YES;
+      [self handleWordAlreadyCompleteChallenge];
     }
-    
   } else if (sender == self.reverseButton) {
     [self handleWordReverse];
   } else if (sender == self.resignButton) {
-    [self.turnEngine handleEndOfGame];
+    [self showResignActionSheet];
+  } else if (sender == self.undoButton) {
+    [self handleUndo];
   } else if (sender == self.doneButton) {
+    if (self.turnEngine.challengeMode) {
+      [self handleChallengeTurnDone];
+    }
+    
     if (self.recentTile) {
       [self handleTurnDone];
     }
@@ -392,10 +499,41 @@
   }
 }
 
--(void)testButtonPressed {
+-(void)updateButtons {
+  
+  self.mainMenuButton.hidden = YES;
+  self.mainMenuButton.enabled = NO;
+  
+  NSUInteger minimumChallenge = [self.defaults integerForKey:@"minimumLetters"] + 3;
+  self.challengeButton.enabled = !self.turnEngine.challengeMode &&
+      !self.recentTile && !self.touchedTile && self.wordArray.count >= minimumChallenge;
+  self.challengeButton.hidden = self.turnEngine.challengeMode;
+  
+  self.doneButton.enabled = self.recentTile || self.turnEngine.challengeMode;
+  
+  self.reverseButton.hidden = [self.defaults integerForKey:@"rules"] != kRulesDuper;
+  self.reverseButton.enabled = [self.defaults integerForKey:@"rules"] == kRulesDuper && self.wordArray.count > 1;
+  
+  self.undoButton.enabled = self.turnEngine.challengeMode;
+  self.undoButton.hidden = !self.turnEngine.challengeMode;
+}
 
-//  NSLog(@"word array count is %lu", (unsigned long)self.wordArray.count);
-  NSLog(@"string is %@", [self wordFromWordArrayCountingRecentTile:YES]);
+#pragma mark - actionSheet methods
+
+-(void)showResignActionSheet {
+  UIActionSheet *resignActionSheet = [[UIActionSheet alloc] initWithTitle:@"Are you sure you want to resign?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Resign" otherButtonTitles:nil, nil];
+  [resignActionSheet showInView:self.view];
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+  if (buttonIndex == 0) {
+    self.gameEndedReason = kGameEndedResign;
+    [self handleWonGame];
+  }
+}
+
+-(void)testButtonPressed {
+  NSLog(@"string is %@", [self wordFromWordArray]);
 }
 
 #pragma mark - system methods
@@ -407,6 +545,10 @@
 
 -(void)saveGame {
   [self.turnEngine saveTurnData];
+}
+
+-(BOOL)prefersStatusBarHidden {
+  return YES;
 }
 
 @end
