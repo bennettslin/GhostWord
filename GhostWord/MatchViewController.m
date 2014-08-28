@@ -7,7 +7,6 @@
 //
 
 #import "MatchViewController.h"
-#import "Constants.h"
 #import "LogicEngine.h"
 #import "Field.h"
 #import "TileField.h"
@@ -15,44 +14,32 @@
 #import "LetterTile.h"
 #import "TurnEngine.h"
 
-typedef enum gameEndedReason {
-  kGameNotEnded,
-  kGameEndedResign,
-  kGameChallengedPlayerWon,
-  kGameChallengedPlayerLost,
-  kGameChallengedWordIsAlreadyWord
-} GameEndedReason;
-
-@interface MatchViewController () <LogicDelegate, TurnEngineDelegate, UIActionSheetDelegate>
+@interface MatchViewController () <LogicDelegate, TurnEngineDelegate>
 
 @property (strong, nonatomic) TurnEngine *turnEngine;
 @property (strong, nonatomic) LogicEngine *logicEngine;
 
-@property (weak, nonatomic) IBOutlet UIButton *mainMenuButton;
-@property (weak, nonatomic) IBOutlet UIButton *helpButton;
+@property (strong, nonatomic) UIView *blankSpace1;
+
+//@property (weak, nonatomic) IBOutlet UIButton *mainMenuButton;
+//@property (weak, nonatomic) IBOutlet UIButton *helpButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *undoButton;
 @property (weak, nonatomic) IBOutlet UIButton *reverseButton;
 @property (weak, nonatomic) IBOutlet UIButton *challengeButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UIButton *resignButton;
-@property (weak, nonatomic) IBOutlet UIButton *testButton;
+//@property (weak, nonatomic) IBOutlet UIButton *testButton;
 
 @property (weak, nonatomic) IBOutlet UILabel *messageLabel;
 
-@property (strong, nonatomic) WordField *wordField;
 @property (strong, nonatomic) TileField *tileField;
-@property (strong, nonatomic) Field *gameOverField;
-
 @property (strong, nonatomic) NSMutableArray *wordArray;
 
   // pointers
 @property (strong, nonatomic) LetterTile *touchedTile;
 @property (strong, nonatomic) LetterTile *recentTile;
 @property (strong, nonatomic) NSUserDefaults *defaults;
-
-  // bools
-@property (nonatomic) GameEndedReason gameEndedReason;
 
 @end
 
@@ -66,6 +53,8 @@ typedef enum gameEndedReason {
     self.defaults = [NSUserDefaults standardUserDefaults];
   }
   [self loadViews];
+  
+  self.view.backgroundColor = kColourMatchDarkTan;
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveGame) name:UIApplicationDidEnterBackgroundNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveGame) name:UIApplicationWillTerminateNotification object:nil];
@@ -87,20 +76,52 @@ typedef enum gameEndedReason {
 
 -(void)loadViews {
   
-  CGRect rackRect = CGRectMake(0, self.view.bounds.size.height - kTileFieldHeight - kWordFieldHeight, self.view.bounds.size.width, kWordFieldHeight);
-  self.wordField = [[WordField alloc] initWithFrame:rackRect];
-  self.wordField.backgroundColor = [UIColor greenColor];
-  [self.view addSubview:self.wordField];
+  CGFloat myWidth = self.view.bounds.size.width;
+  CGFloat myHeight = self.view.bounds.size.height;
+  CGFloat margin = myWidth * 0.05;
   
-  CGRect fieldRect = CGRectMake(0, self.view.bounds.size.height - kTileFieldHeight - kWordFieldHeight, self.view.bounds.size.width, kTileFieldHeight + kWordFieldHeight); // hard coded for now
+  CGRect fieldRect = CGRectMake(0, self.view.bounds.size.height - kTileFieldHeight - kWordFieldHeight, self.view.bounds.size.width, kTileFieldHeight + kWordFieldHeight);
   self.tileField = [[TileField alloc] initWithFrame:fieldRect];
-  self.tileField.backgroundColor = [UIColor blueColor];
+  self.tileField.backgroundColor = [UIColor clearColor];
   [self.view addSubview:self.tileField];
   
-  self.gameOverField = [[Field alloc] initWithFrame:fieldRect];
-  self.gameOverField.backgroundColor = [UIColor purpleColor];
-  self.gameOverField.hidden = YES;
-  [self.view addSubview:self.gameOverField];
+  self.blankSpace1 = [self returnBlankSpace];
+  
+  NSArray *buttonsArray = @[self.challengeButton, self.undoButton, self.doneButton, self.reverseButton, self.resignButton];
+  
+  CGFloat buttonHeight = (kIsIPhone ? 36 : 72);
+  for (UIButton *button in buttonsArray) {
+    button.titleLabel.font = [UIFont fontWithName:kFontModern size:buttonHeight];
+    [button sizeToFit];
+  }
+  
+  self.challengeButton.center = CGPointMake(myWidth * 0.25, margin + buttonHeight * 0.5);
+  self.undoButton.center = self.challengeButton.center;
+  self.doneButton.center = CGPointMake(myWidth * 0.75, margin + buttonHeight * 0.5);
+  self.reverseButton.center = CGPointMake(myWidth * 0.25, margin + buttonHeight * 1.75);
+  self.resignButton.center = CGPointMake(myWidth * 0.75, margin + buttonHeight * 1.75);
+  
+  
+  
+  self.messageLabel.font = [UIFont fontWithName:kFontModern size:kTileHeight * 0.75];
+  self.messageLabel.textColor = [kColourLightTan colorWithAlphaComponent:0.8f];
+  self.messageLabel.adjustsFontSizeToFitWidth = YES;
+  self.messageLabel.frame = CGRectMake(0, 0, myWidth - margin * 2, kTileHeight);
+  self.messageLabel.center = CGPointMake(myWidth / 2, myHeight - kTileHeight / 2);
+}
+
+-(UIView *)returnBlankSpace {
+  UIView *blankSpace = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kTileWidth, kTileHeight)];
+  blankSpace.backgroundColor = [UIColor clearColor];
+  
+  UIView *underlineView = [[UIView alloc] initWithFrame:CGRectMake(0, kTileHeight * 19 / 20, kTileWidth, kTileHeight / 20)];
+  underlineView.backgroundColor = kColourSlateBlue;
+  [blankSpace addSubview:underlineView];
+  
+  blankSpace.hidden = YES;
+  blankSpace.center = CGPointMake(self.view.bounds.size.width, kWordFieldHeight / 2);
+  [self.tileField addSubview:blankSpace];
+  return blankSpace;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -117,7 +138,9 @@ typedef enum gameEndedReason {
   [self.wordArray removeAllObjects];
   
   for (LetterTile *tile in self.tileField.subviews) {
-    [tile removeFromSuperview];
+    if ([tile isKindOfClass:[LetterTile class]]) {
+      [tile removeFromSuperview];
+    }
   }
   
   [self.turnEngine saveTurnData];
@@ -316,9 +339,10 @@ typedef enum gameEndedReason {
 }
 
 -(void)repositionWordArrayTiles {
-    // gets called whenever wordArray is changed
 
   if (self.wordArray.count > 0) {
+    
+    self.blankSpace1.hidden = YES;
     
     BOOL needsToShrink = kTileWidth * 1.1 * self.wordArray.count + (self.recentTile ? 1 : 2) > self.view.bounds.size.width - kTileWidth * 1.1;
     
@@ -359,6 +383,12 @@ typedef enum gameEndedReason {
         [self sendTileToWordField:tile];
       }
     }
+    
+      // single blankSpace
+  } else {
+    self.blankSpace1.hidden = NO;
+//    self.blankSpace2.hidden = YES;
+    self.blankSpace1.center = CGPointMake(self.view.bounds.size.width / 2, kWordFieldHeight / 2);
   }
 }
 
@@ -437,44 +467,50 @@ typedef enum gameEndedReason {
   
   NSString *playerName;
   NSString *messageString = @"";
+  NSUInteger numberOfLines = 2;
+  NSString *lowercaseWord = [self wordFromWordArray];
+  NSString *uppercaseWord = [lowercaseWord uppercaseString];
+  
   switch (self.gameEndedReason) {
     case kGameEndedResign:
       playerName = (self.turnEngine.currentPlayer == kPlayer1) ?
       [self.defaults objectForKey:kPlayer2Key] : [self.defaults objectForKey:kPlayer1Key];
       messageString = [NSString stringWithFormat:@"%@ won!", playerName];
+      numberOfLines = 1;
       break;
     case kGameChallengedPlayerWon:
       playerName = (self.turnEngine.currentPlayer == kPlayer1) ?
       [self.defaults objectForKey:kPlayer1Key] : [self.defaults objectForKey:kPlayer2Key];
-      messageString = [NSString stringWithFormat:@"%@ won!\n'%@' is a word.", playerName, [self wordFromWordArray]];
+      messageString = [NSString stringWithFormat:@"%@ won!\n%@ is a word.", playerName, uppercaseWord];
       break;
     case kGameChallengedPlayerLost:
       playerName = (self.turnEngine.currentPlayer == kPlayer1) ?
       [self.defaults objectForKey:kPlayer2Key] : [self.defaults objectForKey:kPlayer1Key];
-      messageString = [NSString stringWithFormat:@"%@ won!\n'%@' is not a word.", playerName, [self wordFromWordArray]];
+      messageString = [NSString stringWithFormat:@"%@ won!\n%@ is not a word.", playerName, uppercaseWord];
       break;
     case kGameChallengedWordIsAlreadyWord:
       playerName = (self.turnEngine.currentPlayer == kPlayer1) ?
       [self.defaults objectForKey:kPlayer1Key] : [self.defaults objectForKey:kPlayer2Key];
-      messageString = [NSString stringWithFormat:@"%@ won!\n'%@' is a word.", playerName, [self wordFromWordArray]];
+      messageString = [NSString stringWithFormat:@"%@ won!\n%@ is a word.", playerName, uppercaseWord];
       break;
     default:
       break;
   }
   
-  [self.delegate showWonGameVCWithString:messageString];
+  [self.delegate showWonGameVCWithString:messageString numberOfLines:numberOfLines];
 }
 
 #pragma mark - button methods
 
 -(IBAction)buttonPressed:(id)sender {
-  if (sender == self.mainMenuButton) {
-      // this will eventually be disabled
-    [self.turnEngine saveTurnData];
-    [self.delegate backToMainMenu];
-  } else if (sender == self.helpButton) {
-    [self.delegate helpButtonPressed];
-  } else if (sender == self.challengeButton) {
+//  if (sender == self.mainMenuButton) {
+//      // this will eventually be disabled
+//    [self.turnEngine saveTurnData];
+//    [self.delegate backToMainMenu];
+//  } else if (sender == self.helpButton) {
+//    [self.delegate helpButtonPressed];
+//  } else
+  if (sender == self.challengeButton) {
     if (!self.recentTile) {
       self.turnEngine.challengeMode = YES;
       [self handleWordAlreadyCompleteChallenge];
@@ -482,7 +518,9 @@ typedef enum gameEndedReason {
   } else if (sender == self.reverseButton) {
     [self handleWordReverse];
   } else if (sender == self.resignButton) {
-    [self showResignActionSheet];
+    [self.delegate showResignActionSheet];
+//    self.gameEndedReason = kGameEndedResign;
+//    [self handleWonGame];
   } else if (sender == self.undoButton) {
     [self handleUndo];
   } else if (sender == self.doneButton) {
@@ -494,15 +532,15 @@ typedef enum gameEndedReason {
       [self handleTurnDone];
     }
     
-  } else if (sender == self.testButton) {
-    [self testButtonPressed];
+//  } else if (sender == self.testButton) {
+//    [self testButtonPressed];
   }
 }
 
 -(void)updateButtons {
   
-  self.mainMenuButton.hidden = YES;
-  self.mainMenuButton.enabled = NO;
+//  self.mainMenuButton.hidden = YES;
+//  self.mainMenuButton.enabled = NO;
   
   NSUInteger minimumChallenge = [self.defaults integerForKey:@"minimumLetters"] + 3;
   self.challengeButton.enabled = !self.turnEngine.challengeMode &&
@@ -518,22 +556,8 @@ typedef enum gameEndedReason {
   self.undoButton.hidden = !self.turnEngine.challengeMode;
 }
 
-#pragma mark - actionSheet methods
-
--(void)showResignActionSheet {
-  UIActionSheet *resignActionSheet = [[UIActionSheet alloc] initWithTitle:@"Are you sure you want to resign?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Resign" otherButtonTitles:nil, nil];
-  [resignActionSheet showInView:self.view];
-}
-
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-  if (buttonIndex == 0) {
-    self.gameEndedReason = kGameEndedResign;
-    [self handleWonGame];
-  }
-}
-
 -(void)testButtonPressed {
-  NSLog(@"string is %@", [self wordFromWordArray]);
+//  NSLog(@"string is %@", [self wordFromWordArray]);
 }
 
 #pragma mark - system methods

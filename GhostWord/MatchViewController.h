@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Constants.h"
 
 @protocol MatchDelegate;
 
@@ -14,7 +15,11 @@
 
 @property (weak, nonatomic) id<MatchDelegate> delegate;
 
+  // bools
+@property (nonatomic) GameEndedReason gameEndedReason;
+
 -(void)preLoadModel;
+-(void)handleWonGame;
 
 @end
 
@@ -22,6 +27,7 @@
 
 -(void)backToMainMenu; // for test purposes only
 -(void)helpButtonPressed;
--(void)showWonGameVCWithString:(NSString *)string;
+-(void)showWonGameVCWithString:(NSString *)string numberOfLines:(NSUInteger)numberOfLines;
+-(void)showResignActionSheet;
 
 @end

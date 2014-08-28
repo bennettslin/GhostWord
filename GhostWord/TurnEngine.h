@@ -34,6 +34,7 @@
 
 -(NSString *)wordFromWordArray;
 
+-(void)repositionWordArrayTiles;
 -(void)updateButtons;
 -(void)updateMessageLabel;
 -(void)handleWonGame;

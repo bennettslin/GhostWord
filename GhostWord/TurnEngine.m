@@ -29,6 +29,7 @@
     // no saved game, start new game
   if (![self.defaults objectForKey:@"word"]) {
     [self resetGameValues];
+    [self.delegate repositionWordArrayTiles];
     
       // saved game
   } else {
@@ -67,6 +68,7 @@
 
 -(void)handleEndOfGame {
   self.currentWord = nil;
+  self.challengeMode = NO;
   [self.defaults removeObjectForKey:@"word"];
 }
 

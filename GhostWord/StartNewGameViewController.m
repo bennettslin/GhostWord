@@ -9,6 +9,9 @@
 #import "StartNewGameViewController.h"
 #import "Constants.h"
 
+#define kSegmentFontSize (kIsIPhone ? 20.f : 32.f)
+#define kSegmentWidth (kSegmentFontSize * 4)
+
 @interface StartNewGameViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *player1NameField;
@@ -18,9 +21,11 @@
 @property (strong, nonatomic) NSArray *placeholderNames;
 @property (strong, nonatomic) NSArray *playerNameFields;
 
+@property (weak, nonatomic) IBOutlet UILabel *minimumLettersName;
 @property (weak, nonatomic) IBOutlet UILabel *minimumLettersLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *minimumLettersControl;
 
+@property (weak, nonatomic) IBOutlet UILabel *rulesName;
 @property (weak, nonatomic) IBOutlet UILabel *rulesLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *rulesControl;
 
@@ -31,23 +36,93 @@
 
 @end
 
-@implementation StartNewGameViewController
+@implementation StartNewGameViewController {
+  CGFloat _myWidth;
+}
 
 -(void)viewDidLoad {
   [super viewDidLoad];
+  
+  _myWidth = self.view.bounds.size.width * kStartGameWidthFactor;
+  CGFloat myHeight = self.view.bounds.size.height * kStartGameHeightFactor;
+  
+  if (myHeight < 568 * kStartGameHeightFactor) {
+    myHeight = 568 * kStartGameHeightFactor;
+  }
+  
+  CGFloat margin = _myWidth * 0.05;
+  CGFloat yPadding = kIsIPhone ? 15.f : 25.f;
   
   self.playerKeys = @[kPlayer1Key, kPlayer2Key];
   self.placeholderNames = @[kPlaceholder1Name, kPlaceholder2Name];
   self.playerNameFields = @[self.player1NameField, self.player2NameField];
   
   for (UITextField *textField in self.playerNameFields) {
+    NSUInteger index = [self.playerNameFields indexOfObject:textField];
     textField.delegate = self;
     textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-    NSUInteger index = [self.playerNameFields indexOfObject:textField];
     textField.placeholder = self.placeholderNames[index];
+    NSUInteger textFieldHeight = kIsIPhone ? 40 : 72;
+    textField.frame = CGRectMake(margin, margin + textFieldHeight * index * 1.125, _myWidth - margin * 2, textFieldHeight);
+    textField.font = [UIFont fontWithName:kFontModern size:kIsIPhone ? 36.f : 72.f];
+    textField.textColor = kColourSolidBlue;
+    textField.backgroundColor = kColourLightBlue;
+    textField.tintColor = kColourSolidBlue;
   }
   
-  self.minimumLettersLabel.text = @"Minimum letters\nto challenge";
+  self.minimumLettersName.font = [UIFont fontWithName:kFontModern size:(kIsIPhone ? 30 : 54)];
+  self.minimumLettersName.textColor = [kColourLightTan colorWithAlphaComponent:0.8f];
+  self.minimumLettersName.text = @"Minimum letters";
+  [self.minimumLettersName sizeToFit];
+  
+  self.minimumLettersName.center = CGPointMake(_myWidth / 2, self.player2NameField.center.y + self.player2NameField.frame.size.height / 2 + yPadding + self.minimumLettersName.frame.size.height / 2);
+  
+    // segmented controls
+  UIFont *font = [UIFont boldSystemFontOfSize:kSegmentFontSize];
+  NSDictionary *attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
+  
+  [self.minimumLettersControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+  CGRect minimumFrame = self.minimumLettersControl.frame;
+  minimumFrame.size.width = kSegmentWidth * 2;
+  minimumFrame.size.height = kIsIPhone ? 42.f : 60.f;
+  self.minimumLettersControl.frame = minimumFrame;
+  self.minimumLettersControl.center = CGPointMake(_myWidth / 2, self.minimumLettersName.center.y + self.minimumLettersName.frame.size.height / 2 + self.minimumLettersControl.frame.size.height / 2);
+  for (int i = 0; i < 2; i++) {
+    [self.minimumLettersControl setWidth:kSegmentWidth forSegmentAtIndex:i];
+  }
+  
+  self.minimumLettersLabel.font = [UIFont fontWithName:kFontModern size:(kIsIPhone ? 20 : 40)];
+  self.minimumLettersLabel.textColor = [kColourLightTan colorWithAlphaComponent:0.8f];
+  self.minimumLettersLabel.frame = CGRectMake(0, 0, _myWidth - margin * 2, (kIsIPhone ? 50 : 100));
+  self.minimumLettersLabel.adjustsFontSizeToFitWidth = YES;
+  self.minimumLettersLabel.numberOfLines = 2;
+  
+  self.minimumLettersLabel.center = CGPointMake(_myWidth / 2, self.minimumLettersControl.center.y + self.minimumLettersControl.frame.size.height / 2 + self.minimumLettersLabel.frame.size.height / 2);
+  
+  self.rulesName.font = [UIFont fontWithName:kFontModern size:(kIsIPhone ? 30 : 54)];
+  self.rulesName.textColor = [kColourLightTan colorWithAlphaComponent:0.8f];
+  self.rulesName.text = @"Game rules";
+  [self.rulesName sizeToFit];
+  
+  self.rulesName.center = CGPointMake(_myWidth / 2, self.minimumLettersLabel.center.y + self.minimumLettersLabel.frame.size.height / 2 + yPadding + self.rulesName.frame.size.height / 2);
+  
+  [self.rulesControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
+  CGRect rulesFrame = self.rulesControl.frame;
+  rulesFrame.size.width = _myWidth - margin * 2;
+  rulesFrame.size.height = kIsIPhone ? 42.f : 60.f;
+  self.rulesControl.frame = rulesFrame;
+  self.rulesControl.center = CGPointMake(_myWidth / 2, self.rulesName.center.y + self.rulesName.frame.size.height / 2 + self.rulesControl.frame.size.height / 2);
+  for (int i = 0; i < 3; i++) {
+    [self.rulesControl setWidth:rulesFrame.size.width / 3 forSegmentAtIndex:i];
+  }
+  
+  self.rulesLabel.font = [UIFont fontWithName:kFontModern size:(kIsIPhone ? 20 : 40)];
+  self.rulesLabel.textColor = [kColourLightTan colorWithAlphaComponent:0.8f];
+  self.rulesLabel.adjustsFontSizeToFitWidth = YES;
+  
+  self.startGameButton.titleLabel.font = [UIFont fontWithName:kFontModern size:(kIsIPhone ? 36 : 72)];
+  [self.startGameButton sizeToFit];
+  self.startGameButton.center = CGPointMake(_myWidth / 2, myHeight - margin - self.startGameButton.frame.size.height / 4);
   
   self.defaults = [NSUserDefaults standardUserDefaults];
 }
@@ -113,7 +188,7 @@
       [self.defaults setObject:trimmedString forKey:playerKey];
     }
     [self.defaults synchronize];
-    NSLog(@"newPlayerName is '%@'", [self.defaults objectForKey:playerKey]);
+//    NSLog(@"newPlayerName is '%@'", [self.defaults objectForKey:playerKey]);
   }
 }
 
@@ -176,10 +251,10 @@
   
   switch (self.minimumLettersControl.selectedSegmentIndex) {
     case 0:
-      self.minimumLettersLabel.text = @"Words three letters and up lose the game.";
+      self.minimumLettersLabel.text = @"Words three letters and up\nlose the game.";
       break;
     case 1:
-      self.minimumLettersLabel.text = @"Words four letters and up lose the game.";
+      self.minimumLettersLabel.text = @"Words four letters and up\nlose the game.";
       break;
   }
   
@@ -189,17 +264,33 @@
       self.rulesLabel.text = @"New letter is placed at end.";
       break;
     case 1:
-      self.rulesLabel.numberOfLines = 1;
-      self.rulesLabel.text = @"New letter can be placed at beginning or end.";
+      self.rulesLabel.numberOfLines = 2;
+      self.rulesLabel.text = @"New letter can be placed\nat beginning or end.";
       break;
     case 2:
-      self.rulesLabel.numberOfLines = 2;
-      self.rulesLabel.text = @"New letter can be placed at beginning or end.\nOrder of all letters can be reversed.";
-      break;
-    default:
+      self.rulesLabel.numberOfLines = 3;
+      self.rulesLabel.text = @"New letter can be placed\nat beginning or end.\nOrder can be reversed.";
       break;
   }
+  [self adjustRulesDescriptionLabel];
 }
 
+-(void)adjustRulesDescriptionLabel {
+
+  CGFloat margin = _myWidth * 0.05;
+  
+  switch (self.rulesLabel.numberOfLines) {
+    case 1:
+      self.rulesLabel.frame = CGRectMake(0, 0, _myWidth - margin * 2, (kIsIPhone ? 25 : 50));
+      break;
+    case 2:
+      self.rulesLabel.frame = CGRectMake(0, 0, _myWidth - margin * 2, (kIsIPhone ? 50 : 100));
+      break;
+    case 3:
+      self.rulesLabel.frame = CGRectMake(0, 0, _myWidth - margin * 2, (kIsIPhone ? 75 : 150));
+      break;
+  }
+  self.rulesLabel.center = CGPointMake(_myWidth / 2, self.rulesControl.center.y + self.rulesControl.frame.size.height / 2 + self.rulesLabel.frame.size.height / 2);
+}
 
 @end

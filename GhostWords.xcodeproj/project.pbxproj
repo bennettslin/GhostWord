@@ -47,7 +47,7 @@
 		3F7BD88D19AAF93800AF8032 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		3F7BD88E19AAF93800AF8032 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		3F7BD89019AB075100AF8032 /* Filmotype-Modern.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Filmotype-Modern.otf"; sourceTree = "<group>"; };
-		3F92827219AA85E6000D3791 /* GhostWord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GhostWord.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F92827219AA85E6000D3791 /* GhostWords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GhostWords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F92827619AA85E6000D3791 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F92827719AA85E6000D3791 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3F92827919AA85E6000D3791 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 		3F92827C19AA85E6000D3791 /* MatchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MatchViewController.h; sourceTree = "<group>"; };
 		3F92828019AA85E6000D3791 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3F92828219AA85E6000D3791 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		3F92828819AA85E6000D3791 /* GhostWordTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GhostWordTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F92828819AA85E6000D3791 /* GhostWordsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GhostWordsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F92828D19AA85E6000D3791 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F92828E19AA85E6000D3791 /* GhostWordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GhostWordTests.m; sourceTree = "<group>"; };
 		3F92829819AA87F4000D3791 /* en.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = en.txt; sourceTree = "<group>"; };
@@ -111,8 +111,8 @@
 		3F92827319AA85E6000D3791 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3F92827219AA85E6000D3791 /* GhostWord.app */,
-				3F92828819AA85E6000D3791 /* GhostWordTests.xctest */,
+				3F92827219AA85E6000D3791 /* GhostWords.app */,
+				3F92828819AA85E6000D3791 /* GhostWordsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -203,9 +203,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3F92827119AA85E6000D3791 /* GhostWord */ = {
+		3F92827119AA85E6000D3791 /* GhostWords */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3F92829219AA85E6000D3791 /* Build configuration list for PBXNativeTarget "GhostWord" */;
+			buildConfigurationList = 3F92829219AA85E6000D3791 /* Build configuration list for PBXNativeTarget "GhostWords" */;
 			buildPhases = (
 				3F92826E19AA85E6000D3791 /* Sources */,
 				3F92826F19AA85E6000D3791 /* Frameworks */,
@@ -215,14 +215,14 @@
 			);
 			dependencies = (
 			);
-			name = GhostWord;
+			name = GhostWords;
 			productName = GhostWord;
-			productReference = 3F92827219AA85E6000D3791 /* GhostWord.app */;
+			productReference = 3F92827219AA85E6000D3791 /* GhostWords.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3F92828719AA85E6000D3791 /* GhostWordTests */ = {
+		3F92828719AA85E6000D3791 /* GhostWordsTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3F92829519AA85E6000D3791 /* Build configuration list for PBXNativeTarget "GhostWordTests" */;
+			buildConfigurationList = 3F92829519AA85E6000D3791 /* Build configuration list for PBXNativeTarget "GhostWordsTests" */;
 			buildPhases = (
 				3F92828419AA85E6000D3791 /* Sources */,
 				3F92828519AA85E6000D3791 /* Frameworks */,
@@ -233,9 +233,9 @@
 			dependencies = (
 				3F92828A19AA85E6000D3791 /* PBXTargetDependency */,
 			);
-			name = GhostWordTests;
+			name = GhostWordsTests;
 			productName = GhostWordTests;
-			productReference = 3F92828819AA85E6000D3791 /* GhostWordTests.xctest */;
+			productReference = 3F92828819AA85E6000D3791 /* GhostWordsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -249,6 +249,7 @@
 				TargetAttributes = {
 					3F92827119AA85E6000D3791 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = 469SD3FRM6;
 					};
 					3F92828719AA85E6000D3791 = {
 						CreatedOnToolsVersion = 6.0;
@@ -256,7 +257,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3F92826D19AA85E6000D3791 /* Build configuration list for PBXProject "GhostWord" */;
+			buildConfigurationList = 3F92826D19AA85E6000D3791 /* Build configuration list for PBXProject "GhostWords" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -269,8 +270,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3F92827119AA85E6000D3791 /* GhostWord */,
-				3F92828719AA85E6000D3791 /* GhostWordTests */,
+				3F92827119AA85E6000D3791 /* GhostWords */,
+				3F92828719AA85E6000D3791 /* GhostWordsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -332,7 +333,7 @@
 /* Begin PBXTargetDependency section */
 		3F92828A19AA85E6000D3791 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3F92827119AA85E6000D3791 /* GhostWord */;
+			target = 3F92827119AA85E6000D3791 /* GhostWords */;
 			targetProxy = 3F92828919AA85E6000D3791 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -366,7 +367,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Bennett Lin (469SD3FRM6)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -383,7 +384,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -408,7 +409,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Bennett Lin (469SD3FRM6)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -419,7 +420,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -432,10 +433,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = GhostWord/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GhostWords;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -444,10 +449,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = GhostWord/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GhostWords;
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -465,7 +474,7 @@
 				);
 				INFOPLIST_FILE = GhostWordTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GhostWordsTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;
@@ -480,7 +489,7 @@
 				);
 				INFOPLIST_FILE = GhostWordTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GhostWordsTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;
@@ -488,7 +497,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3F92826D19AA85E6000D3791 /* Build configuration list for PBXProject "GhostWord" */ = {
+		3F92826D19AA85E6000D3791 /* Build configuration list for PBXProject "GhostWords" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3F92829019AA85E6000D3791 /* Debug */,
@@ -497,7 +506,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3F92829219AA85E6000D3791 /* Build configuration list for PBXNativeTarget "GhostWord" */ = {
+		3F92829219AA85E6000D3791 /* Build configuration list for PBXNativeTarget "GhostWords" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3F92829319AA85E6000D3791 /* Debug */,
@@ -506,7 +515,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3F92829519AA85E6000D3791 /* Build configuration list for PBXNativeTarget "GhostWordTests" */ = {
+		3F92829519AA85E6000D3791 /* Build configuration list for PBXNativeTarget "GhostWordsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3F92829619AA85E6000D3791 /* Debug */,

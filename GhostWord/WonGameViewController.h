@@ -12,4 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *wonMessageLabel;
 
+-(void)wonMessageLabelText:(NSString *)string numberOfLines:(NSUInteger)numberOfLines;
+
 @end

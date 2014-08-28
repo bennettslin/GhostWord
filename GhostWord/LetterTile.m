@@ -27,7 +27,7 @@
       self.text = [NSString stringWithCharacters:chars length:1];
       self.textAlignment = NSTextAlignmentCenter;
       self.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-      
+      self.textColor = kTileTouchedColour;
       self.backgroundColor = kTileNormalColour;
       self.layer.cornerRadius = kTileWidth / 4;
       self.clipsToBounds = YES;
@@ -41,6 +41,8 @@
   self.isTouched = YES;
   self.frame = CGRectMake(0, 0, kTileWidth * kTouchScaleFactor, kTileHeight * kTouchScaleFactor);
   self.layer.cornerRadius = kTileWidth * kTouchScaleFactor / 4;
+  self.font = [UIFont fontWithName:kFontModern size:kTileWidth * kTouchScaleFactor];
+  self.textColor = kTileNormalColour;
   self.backgroundColor = kTileTouchedColour;
 }
 
@@ -48,6 +50,8 @@
   self.isTouched = NO;
   self.frame = CGRectMake(self.center.x - kTileWidth / 2, self.center.y - kTileHeight / 2, kTileWidth, kTileHeight);
   self.layer.cornerRadius = kTileWidth / 4;
+  self.font = [UIFont fontWithName:kFontModern size:kTileWidth];
+  self.textColor = kTileTouchedColour;
   self.backgroundColor = kTileNormalColour;
 }
 
@@ -56,7 +60,8 @@
 }
 
 -(void)finalise {
-  self.backgroundColor = [UIColor redColor];
+  self.backgroundColor = kColourLightTan;
+  self.textColor = kColourDarkTan;
   self.userInteractionEnabled = NO;
 }
 

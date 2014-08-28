@@ -7,31 +7,49 @@
 //
 
 #import "WonGameViewController.h"
+#import "Constants.h"
 
 @interface WonGameViewController ()
 
 @end
 
-@implementation WonGameViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+@implementation WonGameViewController {
+  CGFloat _myWidth;
+  CGFloat _myHeight;
 }
 
-- (void)didReceiveMemoryWarning {
+-(void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+  
+  _myWidth = self.view.bounds.size.width * kWonGameWidthFactor;
+  _myHeight = self.view.bounds.size.height * kWonGameHeightFactor;
+  
+  self.wonMessageLabel.font = [UIFont fontWithName:kFontModern size:kTileHeight];
+  self.wonMessageLabel.textColor = kColourLightTan;
+  self.wonMessageLabel.adjustsFontSizeToFitWidth = YES;
+}
+
+-(void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)wonMessageLabelText:(NSString *)string numberOfLines:(NSUInteger)numberOfLines {
+  
+  CGFloat margin = _myHeight * 0.05;
+  
+  self.wonMessageLabel.text = string;
+  self.wonMessageLabel.numberOfLines = numberOfLines;
+  switch (self.wonMessageLabel.numberOfLines) {
+    case 1:
+      self.wonMessageLabel.frame = CGRectMake(0, 0, _myWidth - margin * 2, kTileHeight);
+      break;
+    case 2:
+      self.wonMessageLabel.frame = CGRectMake(0, 0, _myWidth - margin * 2, kTileHeight * 2);
+      break;
+  }
+  self.wonMessageLabel.center = CGPointMake(_myWidth / 2, _myHeight / 2);
 }
-*/
 
 @end
