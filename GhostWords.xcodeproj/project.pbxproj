@@ -463,7 +463,7 @@
 		3F92829619AA85E6000D3791 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GhostWord.app/GhostWord";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GhostWords.app/GhostWords";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -482,7 +482,7 @@
 		3F92829719AA85E6000D3791 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GhostWord.app/GhostWord";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/GhostWords.app/GhostWords";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
